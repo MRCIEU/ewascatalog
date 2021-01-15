@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build:
+      context: .
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
+    user: ${USER_ID}:${GROUP_ID}
+    container_name: dev.ewascatalog
+    volumes:
+      - .:/code
+      - ${FILES_DIR}:/files
+    expose:
+      - 8000
+    links:
+      - db:db
+    command: gunicorn website.wsgi:application --timeout 600 -w 2 -b :8000
+
+  db:
+    env_file:
+      - ./settings.env
+    ports:
+      - 3306
+    image: mysql:5.7
+    container_name: dev.ewascatalog_db
+    volumes:
+      - .:/code
+      - ${FILES_DIR}:/files
+  
+  nginx:
+    restart: always
+    build:
+      context: ./webserver/
+    container_name: dev.ewascatalog_srv
+    volumes:
+      - .:/code
+    links:
+      - web:web
+    ports: 
+      - "8080:80"
+      

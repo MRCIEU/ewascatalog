@@ -1,0 +1,13 @@
+trait,analysis,time,cpg,beta,se,p,i2,p_het,details
+SS:TR,not adjusted,early,cg11137145,0.097,0.018,8.53E-08,,,
+SS:TR,not adjusted,early,cg03352173,-0.066,0.012,1.29E-07,,,
+SS:TR,not adjusted,early,cg00885918,-0.152,0.03,2.80E-07,,,
+SS:TR,not adjusted,early,cg20624923,0.221,0.044,4.74E-07,,,
+SS:TR,adjusted,early,cg11137145,0.097,0.018,8.53E-08,,,
+SS:TR,adjusted,early,cg03352173,-0.066,0.012,1.29E-07,,,
+SS:TR,adjusted,early,cg00885918,-0.152,0.03,2.80E-07,,,
+SS:TR,adjusted,early,cg20624923,0.221,0.043,3.47E-07,,,
+SS+TR,not adjusted,early,cg09271157,0.207,0.039,1.14E-07,,,
+SS+TR,adjusted,early,cg09271157,0.207,0.039,9.38E-08,,,
+SS:TR,not adjusted,mid,cg14974711,0.191,0.036,1.34E-07,,,
+SS:TR,adjusted,mid,cg14974711,0.191,0.036,1.10E-07,,,

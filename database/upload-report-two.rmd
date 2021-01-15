@@ -1,0 +1,63 @@
+# Detailed EWAS report
+### `r Sys.Date()`
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+pkgs <- c("knitr")
+lapply(pkgs, require, character.only = TRUE)
+
+knitr::opts_chunk$set(echo = FALSE, 
+            warning = FALSE, 
+            message = TRUE, 
+            cache = FALSE, 
+            dpi = 300 
+            )
+
+# Function for numbers in rmarkdown
+comma <- function(x) format(x, digits = 2, big.mark = ",")
+```
+
+## Checklist
+
+1. Range of summary statistics are reasonable, e.g. standard errors aren't all above 1000.
+2. Number of associations are reasonable.
+3. Check the EFO term(s). If it's not present this should be filled in.
+4. Array entered and number of rows in results matches.
+5. If trait has well established cpg-trait associations, they are present in top hits (e.g. cg05575921 is present for smoking EWAS).
+6. If you haven't done so already, have check through the studies table that would have been sent back to the user in an email after they originally uploaded data. 
+
+## Summary of results
+
+* P-value range: `r paste(comma(range(full_results$P)), collapse = ", ")`
+* N sites with P<1e-7: `r n_p7`
+* N sites with P<1e-4: `r n_p4`
+* SE range is `r range(full_results$SE)`
+* Number of effect estimate outliers: `r n_beta_outliers`
+* EFO term entered for `r studies$Trait` is: `r studies$EFO`
+* Array: `r studies$Methylation_Array`
+* Rows in results: `r nrow(results)` 
+
+## P-values
+
+Here is a look at the top 10 strongest associations in your results (ordered by p-value):
+
+```{r results-check, results="asis"}
+knitr::kable(top_hits, digits = Inf)
+```
+
+```{r man-plot, results="asis"}
+manhattan.plot
+```
+
+```{r qq-plot, results="asis"}
+qq.plot
+```
+
+## Beta + SE distributions
+
+```{r beta-histogram, results="asis"}
+if (betas_present) hist(full_results$Beta)
+```
+
+```{r se-histogram, results="asis"}
+if (se_present) hist(full_results$SE)
+```

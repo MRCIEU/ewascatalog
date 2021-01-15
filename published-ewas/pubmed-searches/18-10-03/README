@@ -1,0 +1,9 @@
+##################################################################
+# README: Results of PubMed Search                               #
+#                                                                #
+# James Staley                                                   #
+# University of Bristol                                          #
+# james.staley@bristol.ac.uk                                     #
+##################################################################
+
+The tsv files in this folder contain processed versions of the input data, with the 03/10/18 version processed such that it only contains new studies not already in the 24/08/17 dataset. A further filter was performed on the 03/10/18 version (*_EWAS_*) to restrict the search to only those studies with the term "epigenome-wide".

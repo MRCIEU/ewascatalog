@@ -1,0 +1,11 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+
+<div class="information">
+   <h1>Upload</h1>
+   <p class="small">&nbsp;</p>       
+   <p>Thank you for your upload. {{ zenodo_msg }} You should have received an email at <b>{{ email }}</b> with an initial report on the data. We will now do more checks on the data, and add the data to the catalog. We will send you another email when this has been completed.</p>
+</div>
+
+{% endblock %}

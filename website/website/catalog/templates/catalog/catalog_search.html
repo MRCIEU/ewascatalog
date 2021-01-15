@@ -1,0 +1,20 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+
+<div class="information">
+   <h1>Search</h1>
+   <p class="small">&nbsp;</p>
+   <div>
+      <form method="get" class="catalog-form">
+         <input id="search_box" type="text" name="search_box" placeholder="Enter CpG, gene, region or trait">
+      <button id="search_submit" type="submit" class="glyphicon glyphicon-search" style="height:37px;width:50px" </button>
+   </div>
+   <div>
+      Examples:
+      <a href="/gwas/search?query=smoking">smoking</a>,
+      <a href="/gwas/search?query=cg00029284">cg00029284</a>
+   </div>
+</div>
+
+{% endblock %}

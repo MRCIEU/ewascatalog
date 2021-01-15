@@ -1,0 +1,58 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="information">
+   <h1>Data download</h1>
+   <p class="small">&nbsp;</p> 
+   <a href="{% static "" %}/docs/ewascatalog-studies.txt.gz" download style="font-size : 15pt" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download all meta-data</a>
+   <a href="{% static "" %}/docs/ewascatalog-results.txt.gz" download style="font-size : 15pt" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download all results</a>
+   <p class="small">&nbsp;</p> 
+   <a name="variables"></a><p>NB: These files are tab-delimited text files that are linked by the column "StudyID". Information on the variables in each file is below.</p>
+   <p class="small">&nbsp;</p> 
+   <h2>Meta-data variables</h2>      
+   <p>This meta-data file has the following pieces of information:</p>
+   <ul>
+      <li>Author - the first author of the publication (surname then initials).</li>
+      <li>Consortium - the name of the or cohorts used.</li>
+      <li>PMID - the PubMed ID of the publication.</li>
+      <li>Date - the date the paper was published (YY-MM-DD).</li>
+      <li>Trait - the name of the trait.</li>
+      <li>EFO - the corresponding <a href="http://www.ebi.ac.uk/efo/" target="_blank">ontology term(s)</a> for the trait. </li>
+      <li>Analysis - description of the analysis performed.</li>
+      <li>Source - the table where the result can be found in the paper.</li>
+      <li>Outcome - the outcome of the analysis.</li>
+      <li>Exposure - the exposure of the analysis.</li>
+      <li>Covariates - the covariates adjusted for in the analysis.</li>
+      <li>Outcome_Units - the units of the outcome.</li>
+      <li>Exposure_Units - the units of the exposure.</li>
+      <li>Methylation_Array - the array used to measure the methylation.</li>
+      <li>Tissue - the tissue in which the methylation was measured.</li>
+      <li>Further_Details - any further details on the analysis.</li>
+      <li>N - the total number of participants used in the analysis.</li>
+      <li>N_Cohorts - the total number of cohorts used in the analysis.</li>
+      <li>Age - the age group participants belonged to.</li>
+      <li>Sex - sex of individuals used in the analysis.</li>
+      <li>Ethnicity - ethnicity of the individuals used in the analysis.</li>
+      <li>StudyID - ID that can be used to link the meta-data to the results.</li>      
+   </ul>
+   <h2>Results variables</h2>      
+   <p>The results file has the following pieces of information:</p>
+   <ul>
+      <li>CpG - the CpG site.</li>
+      <li>Location - the location of the CpG based on hg19 coordinates.</li>
+      <li>Chr - the chromosome where the CpG is located based on hg19 coordinates.</li>
+      <li>Pos - the position where the CpG is located based on hg19 coordinates.</li>
+      <li>Gene - the gene where the CpG is mapped to based on the Ilumina manifest.</li>
+      <li>Type - the type of genomic location the CpG is in (e.g. CpG island).</li>
+      <li>Beta - the effect estimate.</li>
+      <li>SE - the standard error of beta.</li>
+      <li>P - <i>p</i>-value.</li>
+      <li>Details - any additional details on the analysis (e.g. sub-trait).</li>
+      <li>StudyID - ID that can be used to link the meta-data to the results.</li>            
+   </ul>
+   <p> NB: Missing information is left blank or as NA.</p>
+</div>
+
+{% endblock %}

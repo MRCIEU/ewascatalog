@@ -1,0 +1,2 @@
+Author,Consortium,PMID,Date,Trait,EFO,Analysis,Source,Outcome,Exposure,Covariates,Outcome_Units,Exposure_Units,Methylation_Array,Tissue,Further_Details,N,N_Cohorts,Categories,Age,N_Males,N_Females,N_EUR,N_EAS,N_SAS,N_AFR,N_AMR,N_OTH
+REQUIRED,,REQUIRED,,REQUIRED,,,,REQUIRED,REQUIRED,,,,REQUIRED,REQUIRED,,,,,,,,,,,,,
