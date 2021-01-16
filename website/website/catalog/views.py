@@ -48,7 +48,6 @@ def basicquery_response(request):
 def advancedquery_response(request):
     query = request.GET
     db = database.default_connection()
-    #response = advancedquery.execute(db, query, constants.MAX_ASSOCIATIONS, constants.PVALUE_THRESHOLD)
     response = advancedquery.execute(db, query, constants.PVALUE_THRESHOLD)
     if isinstance(response, advancedquery.response):        
         filename = response.save(constants.TMP_DIR)

@@ -22,7 +22,7 @@ from django.http import JsonResponse
 
 from . import objects
 
-HTML_FIELDS = ["author","pmid","outcome","exposure","analysis","n",
+HTML_FIELDS = ["author","pmid","outcome","exposure","tissue","analysis","n",
                "cpg","chrpos","gene","beta","p"]
 
 TSV_FIELDS = ["author","consortium","pmid","date","trait","efo",
@@ -69,8 +69,6 @@ def execute(db, query, pvalue_threshold):
     if isinstance(obj, objects.catalog_object):
         sql = response_sql("("+obj.where_sql()+") AND p<"+str(pvalue_threshold))
         ret = response(db, obj.title(), sql)
-        #if ret.nrow() > max_associations:
-        #    ret.subset(rows=range(max_associations))
     return ret
 
 def response_sql(where):
@@ -96,11 +94,11 @@ class response(query.response):
         self.value = value
         self.sort() ## sort ascending by p-value.
     def sort(self):
+        pvx = self.cols.index("p")
+        self.data.sort(key=lambda x: (float(x[pvx])))
         #aux = self.cols.index("author")
         #pmx = self.cols.index("pmid")
-        pvx = self.cols.index("p")
         #self.data.sort(key=lambda x: (x[aux], x[pmx], float(x[pvx])))
-        self.data.sort(key=lambda x: (float(x[pvx])))
     def table(self):
         """ Returns the query table as a tuple of rows with formatted values. """
         cols = HTML_FIELDS
