@@ -75,7 +75,7 @@ def response_sql(where):
     """
     return ("SELECT DISTINCT studies.*,results.* "
             "FROM results "
-            "JOIN studies ON results.study_id=studies.study_id "
+            "LEFT JOIN studies ON results.study_id=studies.study_id "
             "LEFT JOIN cpgs ON results.cpg=cpgs.cpg "
             "WHERE "+where+" LIMIT 500000")
 

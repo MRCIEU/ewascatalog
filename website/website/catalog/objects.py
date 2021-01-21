@@ -254,7 +254,7 @@ class gene(catalog_object):
                              + "start, end, sites, "
                              + "ifnull(genes.assocs,0) as assocs "
                              + "FROM genes "
-                             + "JOIN cpgs ON cpgs.gene = genes.gene "
+                             + "LEFT JOIN cpgs ON cpgs.gene = genes.gene "
                              + "WHERE "+where)
         return [gene(ret.element("gene", i),
                     ret.element("chr", i),
@@ -299,7 +299,7 @@ class region(catalog_object):
         ret = query.singleton_response(db,
                                        "SELECT COUNT(DISTINCT results.cpg,study_id) "
                                        + "FROM results "
-                                       + "JOIN cpgs ON cpgs.cpg = results.cpg "
+                                       + "LEFT JOIN cpgs ON cpgs.cpg = results.cpg "
                                        + "WHERE " + where + " AND p < " + str(pthreshold))
         assocs = ret.value()
         return region(value, genes, sites, assocs)
@@ -340,8 +340,8 @@ class efo_term(catalog_object):
                              + "efo_terms.pubs as pubs, "
                              + "ifnull(efo_terms.assocs,0) as assocs "
                              + "FROM efo_terms "
-                             + "JOIN study_efo ON efo_terms.efo = study_efo.efo "
-                             + "JOIN studies ON study_efo.study_id = studies.study_id "
+                             + "LEFT JOIN study_efo ON efo_terms.efo = study_efo.efo "
+                             + "LEFT JOIN studies ON study_efo.study_id = studies.study_id "
                              + "WHERE " + where)
         return [efo_term(ret.element("efo", i),
                          ret.element("pubs", i),
@@ -392,8 +392,8 @@ class study(catalog_object):
                                  + "n, pmid, author, trait, tissue, array, "
                                  + "ifnull(studies.assocs,0) as assocs "
                                  + "FROM studies "
-                                 + "JOIN results ON studies.study_id=results.study_id "
-                                 + "JOIN cpgs ON cpgs.cpg=results.cpg "
+                                 + "LEFT JOIN results ON studies.study_id=results.study_id "
+                                 + "LEFT JOIN cpgs ON cpgs.cpg=results.cpg "
                                  + "WHERE " + where + " AND p < " + str(pthreshold))
         return [study(ret.element("study_id", i),
                       ret.element("author", i),
@@ -435,7 +435,7 @@ class trait(catalog_object):
         ret = query.response(db, "SELECT DISTINCT traits.trait as trait, "
                              #+ "studies.efo as efo, "
                              + "traits.pubs as pubs, ifnull(traits.assocs,0) as assocs "
-                             + "FROM traits JOIN studies ON traits.trait = studies.trait "
+                             + "FROM traits LEFT JOIN studies ON traits.trait = studies.trait "
                              + "WHERE " + where)
         ret = [trait(ret.element("trait", i),
                      ret.element("pubs", i),
@@ -490,7 +490,7 @@ class author(catalog_object):
                              + "authors.pubs as pubs, "
                              + "ifnull(authors.assocs,0) as assocs "         
                              + "FROM authors "
-                             + "JOIN studies ON authors.author = studies.author "
+                             + "LEFT JOIN studies ON authors.author = studies.author "
                              + "WHERE " + where)
         return [author(ret.element("author",i),
                        ret.element("pubs",i),
