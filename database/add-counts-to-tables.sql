@@ -1,12 +1,12 @@
 -- p-value threshold for CpG site associations is < 1e-4
 select @threshold := 0.0001;
 
---If 'alter table' hangs, there may be a
---process preventing changes to the database.
---Verify this with 'show processlist'
---and 'kill' any non-root processes by 'Id' value.
+-- If 'alter table' hangs, there may be a
+-- process preventing changes to the database.
+-- Verify this with 'show processlist'
+-- and 'kill' any non-root processes by 'Id' value.
 
-------------------------
+-- ----------------------
 -- studies
 
 alter table studies
@@ -20,7 +20,7 @@ update studies left join (
 ) counts on counts.study_id = studies.study_id
 set studies.assocs = counts.n;
 
-------------------------
+-- ----------------------
 -- genes
 
 alter table genes
@@ -44,7 +44,7 @@ update genes left join (
 ) counts on counts.gene = genes.gene
 set genes.sites = counts.n;
 
-------------------------
+-- ----------------------
 -- cpg sites
 
 alter table cpgs
@@ -59,7 +59,7 @@ where p < @threshold
 group by cpg;
 
 alter table cpg_counts add primary key (cpg);
-    -- mysql doesn't do this implicitly, speeds update a bit
+-- mysql doesn't do this implicitly, speeds update a bit
 
 -- describe/explain
 describe update cpgs
@@ -68,7 +68,7 @@ on cpg_counts.cpg = cpgs.cpg
 set cpgs.assocs = cpg_counts.n; -- 8 minutes!
 
 
-------------------------
+-- ----------------------
 -- authors
 
 drop table if exists authors;
@@ -93,7 +93,7 @@ set authors.pubs = counts.n;
 
 
 
-------------------------
+-- ----------------------
 -- traits
 
 drop table if exists traits;
@@ -116,7 +116,7 @@ update traits left join (
 ) counts on counts.trait = traits.trait
 set traits.pubs = counts.n;
 
-------------------------
+-- ----------------------
 -- efo_terms
 
 -- sigh, we have to deal with comma-separated lists, grrrrr
