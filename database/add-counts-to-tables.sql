@@ -62,7 +62,7 @@ alter table cpg_counts add primary key (cpg);
 -- mysql doesn't do this implicitly, speeds update a bit
 
 -- describe/explain
-describe update cpgs
+update cpgs
 left join cpg_counts
 on cpg_counts.cpg = cpgs.cpg
 set cpgs.assocs = cpg_counts.n; -- 8 minutes!
