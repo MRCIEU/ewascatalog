@@ -43,9 +43,6 @@ if [ ${TABLE_EXISTS} -eq 1 ]; then
     echo "Creating genes table"
     ${ROOT_CMD} ${DB} < create-gene-table.sql
     ${ROOT_CMD} ${DB} -e "LOAD DATA LOCAL INFILE '${FILE_DIR}/gene_annotation.txt' INTO TABLE genes LINES TERMINATED BY '\n' IGNORE 1 LINES"
-
-    echo "Creating gene_details table"
-    ${ROOT_CMD} ${DB} < create-gene-details-table.sql
 fi
 
 
@@ -62,3 +59,23 @@ if [ ${TABLE_EXISTS} -eq 1 ]; then
     ${ROOT_CMD} ${DB} -e "LOAD DATA LOCAL INFILE '${FILE_DIR}/ewas-sum-stats/combined_data/results.txt' INTO TABLE results LINES TERMINATED BY '\n' IGNORE 1 LINES"
 fi
 
+##########################################################
+## Add counts to tables (number of associations and publications)
+## in order to speed up generating the 'splash' page
+
+${ROOT_CMD} ${DB} < add-counts-to-tables.sql
+
+
+
+## Ideally all of these queries should return 0, but these numbers aren't terrible:
+
+  ## select count(distinct gene) from results where gene not in (select gene from genes);
+  ## 8253
+							   
+  ## select count(distinct cpg) from results where cpg not in (select cpg from cpgs);
+  ## 11600
+
+  ## select count(distinct study_id) from results where study_id not in (select study_id from studies);
+  ## 0
+
+## Other issues: inconsistent linking of EFO terms to traits 

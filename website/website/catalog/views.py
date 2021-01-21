@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 
-from . import basicquery, advancedquery, database, upload, constants
+from . import firstquery, finalquery, database, upload, constants
 from .forms import DocumentForm
 
 
@@ -25,17 +25,17 @@ def catalog_home(request):
     keys = request.GET.keys()
     if len(keys) > 0:
         if "query" in keys:
-            return basicquery_response(request)
+            return firstquery_response(request)
         else:
-            return advancedquery_response(request)
+            return finalquery_response(request)
     else:
         return render(request, 'catalog/catalog_home.html', {})
 
-def basicquery_response(request):
+def firstquery_response(request):
     query = request.GET
     text = next(iter(query.values()))
     db = database.default_connection()
-    response = basicquery.execute(db, text, constants.MAX_SUGGESTIONS, constants.PVALUE_THRESHOLD)
+    response = firstquery.execute(db, text, constants.MAX_SUGGESTIONS, constants.PVALUE_THRESHOLD)
     if len(response) > 0:
         return render(request, 'catalog/catalog_queries.html',
                       {'query':text.replace(" ", "_"),
@@ -45,11 +45,11 @@ def basicquery_response(request):
         return render(request, 'catalog/catalog_no_results.html',
                       {'query':text})
 
-def advancedquery_response(request):
+def finalquery_response(request):
     query = request.GET
     db = database.default_connection()
-    response = advancedquery.execute(db, query, constants.PVALUE_THRESHOLD)
-    if isinstance(response, advancedquery.response):        
+    response = finalquery.execute(db, query, constants.PVALUE_THRESHOLD)
+    if isinstance(response, finalquery.response):        
         filename = response.save(constants.TMP_DIR)
         total=response.nrow()
         toomuch=response.nrow() > constants.MAX_ASSOCIATIONS
@@ -108,8 +108,8 @@ def catalog_upload(request):
 def catalog_api(request):
     db = database.default_connection()
     query = request.GET 
-    ret = advancedquery.execute(db, query, constants.MAX_ASSOCIATIONS*1000, constants.PVALUE_THRESHOLD)
-    if isinstance(ret, advancedquery.response):
+    ret = finalquery.execute(db, query, constants.MAX_ASSOCIATIONS*1000, constants.PVALUE_THRESHOLD)
+    if isinstance(ret, finalquery.response):
         return ret.json()
     else:
         return JsonResponse({})

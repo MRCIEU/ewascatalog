@@ -34,7 +34,7 @@ TSV_FIELDS = ["author","consortium","pmid","date","trait","efo",
               "beta","se","p","details","study_id"]
 
 
-def execute(db, query, pvalue_threshold):
+def execute(db, query, pthreshold):
     """ Structured query entry point. 
 
     This function is called in views.py to 
@@ -45,30 +45,26 @@ def execute(db, query, pvalue_threshold):
     obj = ""
     ret = ""
     if category=="cpg":
-        obj = objects.cpg(db, value, pvalue_threshold)
+        obj = objects.cpg.retrieve_object(db, value, pthreshold)
     elif category=="loc":
-        obj = objects.loc(db, value, pvalue_threshold)
+        obj = objects.loc.retrieve_object(db, value, pthreshold)
     elif category=="region":
-        obj = objects.region(db, value, pvalue_threshold)
+        obj = objects.region.retrieve_object(db, value, pthreshold)
     elif category=="gene":
-        obj = objects.gene(db, value, pvalue_threshold)
+        obj = objects.gene.retrieve_object(db, value, pthreshold)
     elif category=="efo":
-        obj = objects.efo_term(db, value, pvalue_threshold)
+        obj = objects.efo_term.retrieve_object(db, value, pthreshold)
     elif category=="trait":
-        obj = objects.trait(db, value, pvalue_threshold)
+        obj = objects.trait.retrieve_object(db, value, pthreshold)
     elif category=="study":
-        obj = objects.study(db, value, pvalue_threshold)
+        obj = objects.study.retrieve_object(db, value, pthreshold)
     elif category=="author":
-        obj = objects.author(db, value, pvalue_threshold)
-    elif category=="location" or category=="studies":
-        loc = objects.retrieve_location(db,query['location'], pvalue_threshold)
-        studies = objects.retrieve_studies(db,query['studies'], pvalue_threshold)
-        if (isinstance(loc, objects.catalog_object)
-            and isinstance(studies, objects.catalog_object)):
-            obj = objects.complex(loc,studies)
+        obj = objects.author.retrieve_object(db, value, pthreshold)
+    elif category=="location" or category=="ewas":
+        obj = objects.complex(db, query['location'], query['ewas'])
     if isinstance(obj, objects.catalog_object):
-        sql = response_sql("("+obj.where_sql()+") AND p<"+str(pvalue_threshold))
-        ret = response(db, obj.title(), sql)
+        sql = response_sql("("+obj.where()+") AND p<"+str(pthreshold))
+        ret = response(db, obj.value, sql)
     return ret
 
 def response_sql(where):
@@ -77,11 +73,11 @@ def response_sql(where):
     The query category/value pair determines 
     how the resulting table is restricted. 
     """
-    where = where.replace("study_id", "results.study_id")
-    return ("SELECT studies.*,results.* "
-            "FROM results JOIN studies "
-            "ON results.study_id=studies.study_id "
-            "WHERE "+where)
+    return ("SELECT DISTINCT studies.*,results.* "
+            "FROM results "
+            "JOIN studies ON results.study_id=studies.study_id "
+            "LEFT JOIN cpgs ON results.cpg=cpgs.cpg "
+            "WHERE "+where+" LIMIT 500000")
 
 class response(query.response):
     """ Query response object. 

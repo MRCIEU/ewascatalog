@@ -57,6 +57,10 @@ class response:
         """ Contents of the specified column. """
         idx = self.cols.index(colname)
         return [row[idx] for row in self.data]
+    def element(self, colname, row):
+        """ Element in specified column in row idx. """
+        idx = self.cols.index(colname)
+        return self.data[row][idx]
     def subset(self, rows=None, cols=None):
         """ Revise table to be a subset of rows and/or columns. 
 
