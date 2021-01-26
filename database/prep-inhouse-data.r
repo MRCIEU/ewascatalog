@@ -145,7 +145,7 @@ load_results_file <- function(file, res_dir)
     res_file_path <- file.path(res_dir, file)
     if (!file.exists(res_file_path)) stop("Results file not present!")
     res <- read.csv(res_file_path)
-    if (all(colnames(res) != results_cols)) stop("Results columns don't match template")
+    if (any(colnames(res) != results_cols)) stop("Results columns don't match template")
     
     res <- res[res$CpG != "", ] # sometimes CpG column can be filled with empty cells
     res$Beta <- comma(res$Beta)
