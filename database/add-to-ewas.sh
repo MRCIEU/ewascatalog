@@ -16,6 +16,9 @@ while read id; do
 	${ROOT_CMD} ${DB} -e "LOAD DATA LOCAL INFILE '${FILE_DIR}/ewas-sum-stats/study-data/${id}/studies.txt' INTO TABLE new_studies LINES TERMINATED BY '\n' IGNORE 1 LINES"
 	${ROOT_CMD} ${DB} -e "LOAD DATA LOCAL INFILE '${FILE_DIR}/ewas-sum-stats/study-data/${id}/results.txt' INTO TABLE new_results LINES TERMINATED BY '\n' IGNORE 1 LINES"
 
+	# Add assocs column to new_studies
+	${ROOT_CMD} ${DB} -e "ALTER TABLE new_studies ADD column assocs INT"
+
 	# Add these to the existing studies and results tables
 	${ROOT_CMD} ${DB} -e "INSERT INTO studies SELECT * FROM new_studies"
 	${ROOT_CMD} ${DB} -e "INSERT INTO results SELECT * FROM new_results"
@@ -31,3 +34,7 @@ done <${FILE_DIR}/ewas-sum-stats/studies-to-add.txt
 
 # Remove all studies from "studies-to-add.txt"
 > ${FILE_DIR}/ewas-sum-stats/studies-to-add.txt
+
+## Add counts to tables (number of associations and publications)
+## in order to speed up generating the 'splash' page
+${ROOT_CMD} ${DB} < add-counts-to-tables.sql
