@@ -50,8 +50,10 @@ update_webserver() {
     cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} start nginx"
 }
 update_database() {
+    base_dir=`pwd`
     cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash generate-zenodo-doi.sh ../settings.env /files'"
     cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash add-to-ewas.sh ../settings.env /files'"
+    cd $base_dir; update_website
 }
 prep_inhouse_data() {
     cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash prep-inhouse-data.sh ../settings.env /files'"
