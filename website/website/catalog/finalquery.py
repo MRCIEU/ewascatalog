@@ -29,7 +29,7 @@ TSV_FIELDS = ["author","consortium","pmid","date","trait","efo",
               "analysis","source","outcome","exposure","covariates",
               "outcome_unit","exposure_unit","array","tissue",
               "further_details","n","n_studies",
-              "age","sex", "ethnicity", 
+              "age","sex", "ancestry", 
               "cpg","chrpos","chr","pos","gene","type",
               "beta","se","p","details","study_id"]
 
