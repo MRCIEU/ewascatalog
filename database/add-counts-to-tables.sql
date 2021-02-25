@@ -6,8 +6,44 @@ select @threshold := 0.0001;
 -- Verify this with 'show processlist'
 -- and 'kill' any non-root processes by 'Id' value.
 
+drop function if exists column_exists;
+
+delimiter $$  
+create function column_exists(
+  tname VARCHAR(64),
+  cname VARCHAR(64)
+)
+  returns boolean
+  reads sql data
+  begin
+    return 0 < (select count(*) from information_schema.columns
+                where table_schema=schema()
+		and table_name=tname
+		and column_name=cname);
+  end $$
+delimiter ;
+
+drop procedure if exists drop_column_if_exists;
+
+delimiter $$
+create procedure drop_column_if_exists(
+  tname VARCHAR(64),
+  cname VARCHAR(64)
+)
+  begin
+    if column_exists(tname, cname)
+    then 
+      set @drop_column_if_exists = concat('alter table ', tname, ' drop column ', cname);
+      prepare drop_query from @drop_column_if_exists;
+      execute drop_query;
+    end if;
+  end $$
+delimiter ;
+
 -- ----------------------
 -- studies
+
+CALL drop_column_if_exists('studies','assocs');
 
 alter table studies
   add column assocs int;
@@ -23,6 +59,8 @@ set studies.assocs = counts.n;
 -- ----------------------
 -- genes
 
+CALL drop_column_if_exists('genes','assocs');
+
 alter table genes
   add column assocs int;
 
@@ -33,6 +71,8 @@ update genes left join (
   group by gene
 ) counts on counts.gene = genes.gene
 set genes.assocs = counts.n;
+
+CALL drop_column_if_exists('genes','sites');
 
 alter table genes
   add column sites int;
@@ -46,6 +86,8 @@ set genes.sites = counts.n;
 
 -- ----------------------
 -- cpg sites
+
+CALL drop_column_if_exists('cpgs','assocs');
 
 alter table cpgs
   add column assocs int default 0; -- 1 minute!

@@ -29,7 +29,7 @@ TSV_FIELDS = ["author","consortium","pmid","date","trait","efo",
               "analysis","source","outcome","exposure","covariates",
               "outcome_unit","exposure_unit","array","tissue",
               "further_details","n","n_studies",
-              "age","sex", "ethnicity", 
+              "age","sex", "ancestry", 
               "cpg","chrpos","chr","pos","gene","type",
               "beta","se","p","details","study_id"]
 
@@ -107,9 +107,7 @@ class response(query.response):
         return tuple(html_copy.data)
     def save(self, path):
         """ Saves the query table to a TSV file and returns the filename. """
-        cols = TSV_FIELDS
-        tsv_copy = self.copy()
-        tsv_copy.subset(cols=cols)
+        tsv_copy = subset_tsv_cols(self)
         ts = str(time.time()).replace(".","")
         filename = self.value.replace(" ", "_")+'_'+ts+'.tsv'
         f = open(path+'/'+filename, 'w')
@@ -118,8 +116,9 @@ class response(query.response):
             f.write('\t'.join(str(x) for x in tsv_copy.row(idx))+'\n')
         return filename
     def json(self):
-        """ Returns the query table as a JSON response object. """
-        return JsonResponse({'results':self.data, 'fields':self.cols})
+        """ Subsets query table and returns as a JSON response object. """
+        tab_copy = subset_tsv_cols(self)
+        return JsonResponse({'results':tab_copy.data, 'fields':tab_copy.cols})
 
 
 def round_sig(x, sig=2):
@@ -145,4 +144,9 @@ def format_beta(b):
     except (ValueError, TypeError):
         return 'NA'
 
-
+def subset_tsv_cols(tab):
+    """ Subsets query table using TSV file columns. """
+    cols = TSV_FIELDS
+    tab_copy = tab.copy()
+    tab_copy.subset(cols=cols)
+    return tab_copy

@@ -25,7 +25,7 @@ CREATE TABLE `new_studies` (
 `sex` varchar(20),
 -- `n_males` varchar(20),
 -- `n_females` varchar(20),
-`ethnicity` varchar(200),
+`ancestry` varchar(200),
 -- `n_eur` varchar(20),
 -- `n_eas` varchar(20),
 -- `n_sas` varchar(20),

@@ -108,7 +108,7 @@ def catalog_upload(request):
 def catalog_api(request):
     db = database.default_connection()
     query = request.GET 
-    ret = finalquery.execute(db, query, constants.MAX_ASSOCIATIONS*1000, constants.PVALUE_THRESHOLD)
+    ret = finalquery.execute(db, query, constants.PVALUE_THRESHOLD)
     if isinstance(ret, finalquery.response):
         return ret.json()
     else:
