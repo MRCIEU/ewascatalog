@@ -1,5 +1,10 @@
 # EWAS Catalog website
 
+> Battram, Thomas, Paul Yousefi, Gemma Crawford, Claire Prince, Mahsa
+> S. Babei, Gemma Sharp, Charlie Hatcher, et al. 2021.
+> ["The EWAS Catalog: A Database of Epigenome-wide Association Studies."](https://osf.io/837wn)
+> OSF Preprints. February 4. doi:10.31219/osf.io/837wn.
+
 Instructions, code and data for installing the EWAS Catalog.
 
 This repository contains all code related to the EWAS Catalog.
