@@ -43,9 +43,9 @@ Server: Docker Engine - Community
 
 ### problems
 
-1. Creating a user account in the container that matches current user within the [`Dockerfile`](docker/Dockerfile)
+1. Creating a user account in the container that matches current user within the [`Dockerfile`](Dockerfile)
 
-solved by replacing `$GROUP_ID` with `999` in the [`Dockerfile`](docker/Dockerfile)
+solved by replacing `$GROUP_ID` with `999` in the [`Dockerfile`](Dockerfile)
 
 2. When starting the website (with `bash catalog start`) failed to load nginx at this stage: `load metadata for docker.io/tutum/nginx:latest`. Error message included: `failed to load cache key: invalid empty config file resolved for docker.io/tutum/nginx`
 
