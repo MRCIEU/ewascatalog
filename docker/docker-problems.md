@@ -21,7 +21,6 @@ Client: Docker Engine - Community
  OS/Arch:           darwin/amd64
  Context:           default
  Experimental:      true
-
 Server: Docker Engine - Community
  Engine:
   Version:          20.10.5
@@ -84,7 +83,6 @@ Client:
  Built:             Wed Oct 14 19:42:56 2020
  OS/Arch:           linux/amd64
  Experimental:      false
-
 Server:
  Engine:
   Version:          18.09.7

@@ -74,7 +74,7 @@ That single step is actually composed of a sequence of several sub-steps:
 2. `bash catalog start`: start the docker container running
 3. `bash catalog create-database`: create and populate the database with EWAS summary statistics
 
-Check [docker-problems.md](docker-problems.md) to see previous bugs when building the docker container and potential solutions.
+Check [docker-problems.md](docker/docker-problems.md) to see previous bugs when building the docker container and potential solutions.
 
 ## Navigating to the website
 
