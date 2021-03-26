@@ -289,10 +289,9 @@ rchar50 <- c("P")
 rchar200 <- c("Details")
 rmax_chars <- c(20, 50, 200)
 
-schar50 <- c("Author", "PMID", "Source", "Trait_Units", "dnam_units",
-            "Methylation_Array")
+schar50 <- c("Author", "PMID", "Source", "Trait_Units", "dnam_units")
 schar20 <- c("Date", "N", "N_Cohorts", "Age_group", "Sex")
-schar100 <- c("Tissue", "EFO")
+schar100 <- c("Tissue", "EFO", "Methylation_Array")
 schar300 <- "Covariates"
 schar200 <- template_study_cols[!template_study_cols %in% c(schar50, schar20, schar100, schar300)]
 smax_chars <- c(20, 50, 100, 200, 300)

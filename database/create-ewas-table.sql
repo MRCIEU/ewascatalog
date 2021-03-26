@@ -15,7 +15,7 @@ CREATE TABLE `studies` (
 `covariates` varchar(300),
 `outcome_unit` varchar(50),
 `exposure_unit` varchar(50),
-`array` varchar(50),
+`array` varchar(100),
 `tissue` varchar(100),
 `further_details` varchar(200),
 `n` varchar(20),

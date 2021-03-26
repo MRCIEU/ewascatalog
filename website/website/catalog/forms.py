@@ -88,7 +88,7 @@ class DocumentForm(forms.Form):
 	covariates = forms.MultipleChoiceField(required=False, label="Covariates", help_text="Select all that apply. For meta-analysis entries select the covariates commonly used across studies.",
 								 widget=forms.CheckboxSelectMultiple, choices=COVARIATE_CHOICES)
 	other_covariates = forms.CharField(required=False, max_length = 300, label="Other Covariates", help_text="Please separate each with a comma, e.g. a covariate, another covariate.")
-	array = forms.CharField(max_length=50, label="Methylation Array*")
+	array = forms.CharField(max_length=100, label="Methylation Array*")
 	tissue = forms.CharField(max_length=100, label="Tissue*", help_text="Start typing to see some options.")
 	further_details = forms.CharField(required=False, max_length=200, label="Additional details about the analysis", help_text="e.g. analysis of twins")
 	## participant info
