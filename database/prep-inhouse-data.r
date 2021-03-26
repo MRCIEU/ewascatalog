@@ -145,6 +145,7 @@ load_results_file <- function(file, res_dir)
     res_file_path <- file.path(res_dir, file)
     if (!file.exists(res_file_path)) stop("Results file not present!")
     res <- read.csv(res_file_path)
+    res <- res[, !grepl("^X", colnames(res))] # sometimes empty extra columns are added
     if (any(colnames(res) != results_cols)) stop("Results columns don't match template")
     
     res <- res[res$CpG != "", ] # sometimes CpG column can be filled with empty cells
@@ -344,6 +345,7 @@ lapply(1:nrow(new_studies), function(x) {
     if (!df$success) return(NULL)
 
     to_rm <- file.path(res_dir, df$Results_file)
+    to_rm <- gsub(" ", "\\\\ ", to_rm) # making sure spaces are dealt with
     system(paste("rm", to_rm))
     out_msg <- message("Removed results file: ", to_rm)
     return(out_msg)
