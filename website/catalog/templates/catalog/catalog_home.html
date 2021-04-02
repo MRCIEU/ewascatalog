@@ -1,0 +1,93 @@
+<head>
+<style>
+p.big {
+    line-height: 1.8;
+}
+
+.collapsible {
+  background-color: #ffffff;
+  cursor: pointer;
+  padding-top: 0.5em;
+  padding-left: 3em;
+  border: none;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  color: #337ab7;
+}
+.collapsible:hover {
+  color: #23527c;
+  text-decoration: underline;
+}
+.collapsiblecontent {
+  display: none;
+  overflow: hidden;
+}
+</style>
+</head>
+
+
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="information">
+   <h1>Search</h1>
+   <p class="small">&nbsp;</p>
+
+   <form method="get" id="searchform" class="searchform">
+     <div class="searchboxwrapper">
+       <input class="searchbox" id="query" type="text" name="query" placeholder="Enter CpG, gene, region, trait, EFO term, author name or PMID">
+       <input class="searchsubmit" type="submit" id="searchsubmit" value="" onclick="myFunction()">
+     </div>
+   </form>
+   <div>
+     Examples:
+     <a onclick="myFunction()" href="/?query=cg00029284">cg00029284</a>,
+     <a onclick="myFunction()" href="/?query=chr12:111731203">chr12:111731203</a>,
+     <a onclick="myFunction()" href="/?query=FTO">FTO</a>,
+     <a onclick="myFunction()" href="/?query=6:15000000-25000000">6:15000000-25000000</a>,
+     <a onclick="myFunction()" href="/?query=body+mass+index">body mass index</a>,
+     <a onclick="myFunction()" href="/?query=27040690">27040690</a>.
+   </div>
+   <button class="collapsible">+Advanced</button>
+   <div class="collapsiblecontent" style="height: 5em">
+     <form method="get" id="searchform" class="searchform">
+       <div class="searchboxwrapper">
+	 <input class="searchbox" id="location" type="text" name="location" placeholder="Enter CpG, gene or region" style="width: 100%">
+	 <input class="searchbox" id="ewas" type="text" name="ewas" placeholder="Enter trait, EFO term, author name or PMID" style="width: 100%">
+	 <input class="searchsubmit" type="submit" id="searchsubmit" value="" onclick="myFunction()" style="height: 70px" >
+       </div>
+     </form>
+   </div>
+   <center>
+     <p>&nbsp;</p>
+     <p id="text" style="display:none">
+       <img src="../../static/images/load.gif" width="80px" height="auto"/>
+     </p>
+   </center>
+</div>
+
+<script>
+function myFunction() {
+    text.style.display = "block";
+}
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display=="block"){
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
+
+{% endblock %}

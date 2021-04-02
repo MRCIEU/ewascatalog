@@ -1,0 +1,420 @@
+@import "base";
+@import "imports/modules/forms";
+
+
+html {
+    position: relative;
+    min-height: 100%;
+    font-family: Helvetica;
+}
+
+.page-header {
+    background-color: #bf2f38;
+    margin-top: 0;
+    padding: 20px 20px 20px 20px;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 50pt;
+    text-decoration: none;
+    font-family: Helvetica;
+}
+
+.nav {
+    font-size: 13pt;
+}
+
+.container {
+    width: 70%;
+}
+
+.content {
+    height: auto;
+    position: relative;
+    margin-left: 60px;
+    margin-right: 60px;
+    font-size: 15pt;
+    margin-bottom: 100px;
+    background-color: #ffffff;
+}
+
+h1 {
+    font-family: cursive;
+    font-weight: bold;
+    font-family: Helvetica;
+}
+
+h2 {
+    font-family: cursive;
+    font-size: 16pt;
+    font-weight: bold;
+    font-family: Helvetica;
+}
+
+.information {
+    text-align: left;
+    font-size: 15pt;   
+    font-family: Helvetica; 
+}
+
+.information h1{
+    font-size: 25pt;
+}
+
+.login {
+    font-size: 12pt;    
+}
+
+.catalog {
+    font-size: 12pt;
+}
+
+.catalog-form {
+    width: 100%;
+    font-size: 12pt;
+}
+
+.catalog-form textarea, .catalog-form input {
+    width: 70%;
+    font-size: 12pt;
+    border-radius: 5px;
+    background: #f9f9f9;
+    height: 35px;
+    padding-left: 10px;
+    border: 1.25px solid #999999;
+}
+
+.save {
+    float: left;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: #ffffff;
+    float: right;
+    font-size: 26pt;
+    margin-right: 0px;
+}
+
+.page-wrap {
+    text-align: center;
+    width: 800px;
+    margin: 0 auto;
+}
+
+body{
+    padding-top: 50px;
+    margin-bottom: 60px;
+    background-color: #ffffff;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    font-size: 10.5pt;
+    background-color: #efefef;
+    text-align: center;
+}
+
+tr.space > td
+{
+    padding-bottom: 1em;
+}
+
+p.small {
+    line-height: 50%;
+}
+
+p.smalltext {
+    text-align: left;
+    font-size: 12pt;   
+    font-family: Helvetica; 
+}
+
+.searchform div {
+    height: 35px;
+    width: 80%;
+}
+
+.searchboxwrapper {
+    position: relative;
+}
+
+.searchbox {
+    width: 100%;
+    font-size: 13pt;
+    height: 35px;
+    background: #f9f9f9;
+    color: #000;
+    padding-left: 10px;
+    border: 1.25px solid #999999;
+    outline: none;
+    border-radius: 3px;
+}
+
+.searchsubmit {
+    font-family: 'FontAwesome';
+    width: 35px;
+    height: 35px;
+    border-radius: 0px 3px 3px 0px;
+    border-top: 1px solid #999999;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    font-size: 15px;
+    color: #999999;
+    background: #f9f9f9;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0px;
+}
+
+select {
+    background-color: #ffffff;
+    border: thin solid black;
+    border-radius: 5px;
+    font-size: 12pt;
+    display: inline-block;
+    margin: 0;
+    padding: 0 5 0 0;  
+    height: 35px;
+    padding-left: 5px;    
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select.minimal {
+  background-image:
+    url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png");
+  background-size:
+    8px 8px,
+    8px 8px,
+    8px 8px;
+  background-repeat: no-repeat;
+}
+
+@media screen and (max-width:320px) {
+  .container{
+    width: 100%;
+  }
+  .page-header {
+    background-color: #bf2f38;
+    margin-top: 0;
+    padding: 2px 2px 2px 2px;
+  }
+  .content {
+    height: auto;
+    position: relative;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 13pt;
+    margin-bottom: 100px;
+    background-color: #ffffff;
+  }
+  .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 30pt;
+    text-decoration: none;
+    font-family: Helvetica;
+  }
+  h2 {
+    font-family: cursive;
+    font-size: 14pt;
+    font-weight: bold;
+    font-family: Helvetica;
+  }
+  .information {
+    text-align: left;
+    font-size: 13pt;   
+    font-family: Helvetica; 
+  }
+  .information h1{
+    font-size: 18pt;
+  }
+  .searchform div {
+    height: 35px;
+    width: 100%;
+  }
+  .searchbox {
+    width: 100%;
+    font-size: 12pt;
+    height: 35px;
+    background: #f9f9f9;
+    color: #000;
+    padding-left: 10px;
+    border: 1.25px solid #999999;
+    outline: none;
+    border-radius: 3px;
+  }
+  .searchsubmit {
+    font-family: 'FontAwesome';
+    width: 35px;
+    height: 35px;
+    border-radius: 0px 3px 3px 0px;
+    border-top: 1px solid #999999;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    font-size: 15px;
+    color: #999999;
+    background: #f9f9f9;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0px;
+  }
+  #small {
+        display: none;
+    }
+  #smallimage {
+        width: 100px;
+  }
+}
+
+
+@media screen and (max-width:640px) {
+  .container{
+    width: 95%;
+  }
+  .page-header {
+    background-color: #bf2f38;
+    margin-top: 0;
+    padding: 2px 2px 2px 2px;
+  }
+  .content {
+    height: auto;
+    position: relative;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 13pt;
+    margin-bottom: 100px;
+    background-color: #ffffff;
+  }
+  .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 30pt;
+    text-decoration: none;
+    font-family: Helvetica;
+  }
+  h2 {
+    font-family: cursive;
+    font-size: 14pt;
+    font-weight: bold;
+    font-family: Helvetica;
+  }
+  .information {
+    text-align: left;
+    font-size: 13pt;   
+    font-family: Helvetica; 
+  }
+  .information h1{
+    font-size: 18pt;
+  }
+  .searchform div {
+    height: 35px;
+    width: 100%;
+  }
+  .searchbox {
+    width: 100%;
+    font-size: 12pt;
+    height: 35px;
+    background: #f9f9f9;
+    color: #000;
+    padding-left: 10px;
+    border: 1.25px solid #999999;
+    outline: none;
+    border-radius: 3px;
+  }
+  .searchsubmit {
+    font-family: 'FontAwesome';
+    width: 35px;
+    height: 35px;
+    border-radius: 0px 3px 3px 0px;
+    border-top: 1px solid #999999;
+    border-left: 1px solid #999999;
+    border-right: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+    font-size: 15px;
+    color: #999999;
+    background: #f9f9f9;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0px;
+  }
+  #small {
+        display: none;
+    }
+  #smallimage {
+        width: 100px;
+  }
+}
+
+
+@media screen and (max-width:1400px) {
+  .container{
+    width: 90%;
+  }
+}
+
+
+
+.catalog-object-marker {
+    background-color: yellowgreen;
+    padding: 3px;
+    color: white;
+    border-radius: 7px;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.cpg-marker {
+    background-color: #0f2080;
+}
+
+.loc-marker {
+    background-color: #0f2080;
+}
+
+.gene-marker {
+    background-color: firebrick;
+}
+
+.region-marker {
+    background-color: #2aabd2;
+}
+
+.trait-marker {
+    background-color: #ffac1b;
+}
+
+.efo-marker {
+    background-color: #ffac1b;
+}
+
+.study-marker {
+    background-color: yellowgreen;
+}
+
+.catalog-object-border {
+    overflow: hidden;
+    width: 100%;
+    table-layout: fixed;
+    border:1px solid #cde2f5;
+    background:#fff;
+    margin: 10px auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px #E0E0E0;
+    z-index: 90;
+}
+
+
+

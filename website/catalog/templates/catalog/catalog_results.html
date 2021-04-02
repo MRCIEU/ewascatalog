@@ -1,0 +1,65 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+{% load static %}
+
+<script type="text/javascript" class="init">
+  $(document).ready(function(){
+   $('#myTable').DataTable({
+    "order": [[ 11, "asc" ]]
+   });
+  });
+</script>
+
+
+{% if subset < total %}
+<h1> Search results for top {{ subset }} of {{ total }} for <i>{{query_label}}</i></h1>
+(the full set can be
+<a href="{% static "" %}/tmp/{{filename}}" download="{{query}}.tsv">downloaded</a>)
+{% else %}
+<h1> Search results for <i>{{query_label}}</i> </h1>
+{% endif %}
+
+<p class="small">&nbsp;</p>
+
+<div class="catalog">
+<table id="myTable" width="100%" class="table table-striped" style="font-size: 75%"> 
+	<thead>
+		<tr>
+			<th data-sortable="true">Author</th>
+			<th data-sortable="true">PMID</th>
+			<th data-sortable="true">Outcome</th>
+			<th data-sortable="true">Exposure</th>
+			<th data-sortable="true">Tissue</th>
+			<th data-sortable="true">Analysis</th>
+			<th data-sortable="true">N</th>
+			<th data-sortable="true">CpG</th>
+			<th data-sortable="true">Location</th>
+			<th data-sortable="true">Gene</th>
+			<th data-sortable="true">Beta</th>
+			<th data-sortable="true">P</th>
+		</tr>
+	</thead>
+	<tbody>
+                {% for row in response %}
+		<tr>
+                   {% for col in row %}
+			<td>{{ col }}</td>
+                   {% endfor %}
+                </tr> 
+                {% endfor %}
+	</tbody>
+</table>
+</div>
+
+<p class="small">&nbsp;</p>
+
+<a href="{% static "" %}/tmp/{{filename}}" download="{{query}}.tsv" style="font-size : 13pt" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download</a>
+<p class="small">&nbsp;</p>
+<p class="smalltext">*this tab-deliminated tsv file contains the full set of associations and variables, i.e. those in the <a href="{% url 'catalog_download' %}#variables">downloadable catalog</a>. </p> 
+
+
+
+
+{% endblock %}
+
+
