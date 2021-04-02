@@ -4,14 +4,14 @@ services:
   web:
     restart: always
     build:
-      context: .
+      context: ./website/
       args:
         - USER_ID=${USER_ID}
         - GROUP_ID=${GROUP_ID}
     user: ${USER_ID}:${GROUP_ID}
     container_name: dev.ewascatalog
     volumes:
-      - .:/code
+      - ./website:/code
       - ${FILES_DIR}:/files
     expose:
       - 8000

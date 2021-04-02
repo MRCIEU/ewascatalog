@@ -1,9 +1,0 @@
-Django>=1.8,<2.0
-django-environ
-mysqlclient
-django-excel
-gunicorn
-requests
-pytabix
-django-ratelimit
-pandas

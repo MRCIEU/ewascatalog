@@ -1,8 +1,7 @@
 # EWAS Catalog and Docker
 
-This folder contains files needed to 'dockerize' the website:
-`docker-compose.yml`, `Dockerfile`, `python-requirements.txt`.
-These files are copied to the website base directory by the
+This folder contains `docker-compose.yml` needed to 'dockerize' the website.
+This file is copied to the website base directory by the
 project [catalog](../catalog) script before building the docker containers.
 
 The remainder of this document gives information

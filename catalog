@@ -3,7 +3,7 @@
 FILES_DIR=../files
 ## A copy of the FILES_DIR folder is here: /projects/MRC-IEU/research/projects/ieu1/wp2/004/working/data/data-files-for-ewascatalog2
 
-WEBSITE_DIR=../running
+RUNNING_DIR=../running
 ## Base directory of the website directory
 
 ## Database settings can be found in the settings.env file
@@ -17,55 +17,57 @@ GROUP_ID=`id -g`
 DOCKER_COMPOSE="FILES_DIR=${FILES_DIR} USER_ID=${USER_ID} GROUP_ID=${GROUP_ID} docker-compose"
 
 install_website() {
-    bash website/install.sh ${WEBSITE_DIR} ${FILES_DIR} ${SETTINGS}
+    bash website/install.sh ${RUNNING_DIR} ${FILES_DIR} ${SETTINGS}
 }
 copy_webserver() {
-    cp -r webserver ${WEBSITE_DIR}
+    cp -r webserver ${RUNNING_DIR}
 }
 copy_docker() {
-    cp docker/Dockerfile docker/*.yml docker/*.txt docker/*.r ${WEBSITE_DIR}
+    cp docker/*.yml ${RUNNING_DIR}
 }
 build_catalog() {
+    mkdir -p ${RUNNING_DIR}
+    cp ${SETTINGS} ${RUNNING_DIR}
     install_website
     copy_docker
     copy_webserver
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} build"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} build"
 }
 start_catalog() {
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} up -d"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} up -d"
 }
 create_database() {
-    cp -r database ${WEBSITE_DIR}
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash create-annotations.sh /files'"
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash create.sh ../settings.env /files'"
+    cp -r database ${RUNNING_DIR}
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash create-annotations.sh /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash create.sh ../settings.env /files'"
 }
 update_website() {
     install_website
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} restart web"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} restart web"
 }
 update_webserver() {
-    cp -r webserver ${WEBSITE_DIR}
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} stop nginx"
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} build nginx"
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} start nginx"
+    cp -r webserver ${RUNNING_DIR}
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} stop nginx"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} build nginx"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} start nginx"
 }
 update_database() {
     base_dir=`pwd`
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash generate-zenodo-doi.sh ../settings.env /files'"
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash add-to-ewas.sh ../settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash generate-zenodo-doi.sh ../settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash add-to-ewas.sh ../settings.env /files'"
     cd $base_dir; update_website
 }
 prep_inhouse_data() {
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash prep-inhouse-data.sh ../settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash prep-inhouse-data.sh ../settings.env /files'"
 }
 check_new_upload() {
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash prep-new-data.sh ../settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec web bash -c 'cd /code/database; bash prep-new-data.sh ../settings.env /files'"
 }
 stop_catalog() {
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} stop"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} stop"
 }
 delete_catalog() {
-    cd ${WEBSITE_DIR}; eval "${DOCKER_COMPOSE} rm"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} rm"
 }
 
 

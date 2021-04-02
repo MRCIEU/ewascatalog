@@ -1,18 +1,18 @@
 #!/bin/bash
 
-WEBSITE_DIR="$1"
+RUNNING_DIR="$1"
 FILE_DIR="$2"
 SETTINGS="$3"
 
 ## Prepare to copy
-mkdir -p ${WEBSITE_DIR}
+WEBSITE_DIR=${RUNNING_DIR}/website
 
 ## delete old version
-rm -rf ${WEBSITE_DIR}/catalog
-rm -rf ${WEBSITE_DIR}/website
+rm -rf ${WEBSITE_DIR}
+mkdir -p ${WEBSITE_DIR}
 
 ## copy the website files
-cp -rv website/website/* ${WEBSITE_DIR}
+cp -rv website/* ${WEBSITE_DIR}
 
 ## copy over settings.env
 cp ${SETTINGS} ${WEBSITE_DIR}
