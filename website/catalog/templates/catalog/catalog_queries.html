@@ -40,7 +40,11 @@
 	<td style="word-break: normal">
           <span style="font-size: 75%">
             {% for key,value in query.details.items %}
-            <b>{{key}}</b>:{{value}}&nbsp;
+	      {% if key == "PMID" %}
+	      <b>{{key}}</b>:<a href="https://pubmed.ncbi.nlm.nih.gov/{{value}}" target="_blank">{{value}}</a> &nbsp;
+	      {% else %}
+              <b>{{key}}</b>:{{value}}&nbsp;
+	      {% endif %}
             {% endfor %}
           </span>
 	</td>

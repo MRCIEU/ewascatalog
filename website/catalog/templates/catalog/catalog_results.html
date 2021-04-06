@@ -41,11 +41,15 @@
 	</thead>
 	<tbody>
                 {% for row in response %}
-		<tr>
-                   {% for col in row %}
-			<td>{{ col }}</td>
-                   {% endfor %}
-                </tr> 
+		  <tr>
+                  {% for col in row %}
+		    {% if forloop.counter == 2 %}
+		      <td><a href="https://pubmed.ncbi.nlm.nih.gov/{{col}}" target="_blank">{{col}}</a></td>
+		    {% else %}
+    		      <td>{{ col }}</td>
+		    {% endif %}
+                  {% endfor %}
+                  </tr> 
                 {% endfor %}
 	</tbody>
 </table>
