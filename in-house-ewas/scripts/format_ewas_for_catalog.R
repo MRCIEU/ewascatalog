@@ -112,30 +112,54 @@ format_res <- function(df)
 
 out_res_path <- file.path(derived_path, "results")
 if (!file.exists(out_res_path)) system(paste("mkdir", out_res_path))
+out_full_res_path <- file.path(derived_path, "full_stats")
+if (!file.exists(out_full_res_path)) system(paste("mkdir", out_full_res_path))
 
 # for umlaut values 
-# meta_dat[190, "phen"] <- "Anti_Müllerian_hormone__AMH__ng_ml__FOM1"
+# meta_dat[190, "phen"] <- "Anti_Mullerian_hormone__AMH__ng_ml__FOM1"
 # meta_dat[190, "full_stats_file"] <-"results/alspac/raw/FOM/full_stats/Anti_Müllerian_hormone__AMH__ng_ml__FOM1.txt"
 
-studies <- map_dfr(1:nrow(meta_dat), function(x) {
+studies_full <- map_dfr(1:nrow(meta_dat), function(x) {
 	print(x)
 	df <- meta_dat[x, ]
-	# read in full stats and get P<1e-4
-	derived_dat <- read_tsv(df$full_stats_file) %>%
-		dplyr::filter(p.value < 1e-4) %>%
+	# read in full stats and format
+	full_dat <- read_tsv(df$full_stats_file) %>%
 		rename(CpG = probeID, Beta = estimate, SE = se, P = p.value) %>%
 		format_res
-	# if no results return null
-	if (nrow(derived_dat) == 0) return(NULL)
-	# write out results to already determined results file
-	write.csv(derived_dat, file = file.path(out_res_path, df$Results_file), 
-			  row.names = F, quote = F)
+	# get P<1e-4
+	derived_dat <- full_dat %>%
+		dplyr::filter(P < 1e-4)	
 	# extract data for studies file
 	studies_out <- df %>%
-		dplyr::select(one_of(studies_columns))
+		dplyr::select(one_of(studies_columns))	
+	# write out derived results if any present
+	if (nrow(derived_dat) == 0) {
+		studies_out$keep <- FALSE
+	} else {
+		# write out results to already determined results file
+		write.csv(derived_dat, file = file.path(out_res_path, df$Results_file), 
+			  row.names = F, quote = F)
+		studies_out$keep <- TRUE
+	}
+	# write out the full data to full res path
+	full_dat <- full_dat[, c("CpG", "Beta", "SE", "P")]
+	write.csv(full_dat, file = file.path(out_full_res_path, df$Results_file), 
+			  row.names = F, quote = F)
 	return(studies_out)
 })
 
+studies <- studies_full %>%
+	dplyr::filter(keep) %>%
+	dplyr::select(-keep)
+
+studies_full <- studies_full %>%
+	dplyr::select(-keep)
+
+# write out full studies data for upload to zenodo
+write.csv(studies_full, file = file.path(derived_path, "studies-full.csv"), 
+		  row.names = FALSE, quote = TRUE)
+
+# write out studies data for upload to the catalog
 write.xlsx(studies, file = file.path(derived_path, "studies.xlsx"), 
 		   sheetName = "data")
 
