@@ -22,12 +22,16 @@ services:
   db:
     env_file:
       - ./settings.env
+    build:
+      context: ./database/
+      args:
+        - USER_ID=${USER_ID}
+        - GROUP_ID=${GROUP_ID}
     ports:
       - 3306
-    image: mysql:5.7
     container_name: dev.ewascatalog_db
     volumes:
-      - .:/code
+      - ./database:/code
       - ${FILES_DIR}:/files
   
   nginx:
