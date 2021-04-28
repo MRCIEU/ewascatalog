@@ -1,4 +1,4 @@
-pkgs <- list(cran=c("devtools", "Hmisc", "BiocManager" "data.table", "dplyr", "cluster", "readxl"),
+pkgs <- list(cran=c("devtools", "Hmisc", "BiocManager", "data.table", "dplyr", "cluster", "readxl"),
              bioc="biomaRt",
              git=c("https://github.com/perishky/rmdreport", "https://github.com/perishky/meffil", "https://github.com/perishky/ewaff"))
 
