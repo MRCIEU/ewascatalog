@@ -25,19 +25,22 @@ copy_webserver() {
 copy_docker() {
     cp docker/*.yml ${RUNNING_DIR}
 }
+copy_database() {
+    cp -r database ${RUNNING_DIR}
+}
 build_catalog() {
     mkdir -p ${RUNNING_DIR}
     cp ${SETTINGS} ${RUNNING_DIR}
     install_website
     copy_docker
     copy_webserver
+    copy_database
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} build"
 }
 start_catalog() {
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} up -d"
 }
 create_database() {
-    cp -r database ${RUNNING_DIR}
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash create-annotations.sh /files'"
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash create.sh ../settings.env /files'"
 }
@@ -46,7 +49,7 @@ update_website() {
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} restart web"
 }
 update_webserver() {
-    cp -r webserver ${RUNNING_DIR}
+    copy_webserver
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} stop nginx"
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} build nginx"
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} start nginx"
