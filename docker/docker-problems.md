@@ -55,6 +55,8 @@ solved by running `docker pull tutum/nginx` (see https://hub.docker.com/r/tutum/
 
 didn't matter on one version of macos, but did on another (unsure which). Can add/modify groups by going to `System Preferences > Users & Groups`, clicking the `+` symbol selecting "Group" in the new account drop-down list, creating the group "docker" and adding your username to it.
 
+4. Build fails when FROM image isn't cached - in the Dockerfile for the webserver [`../webserver/Dockerfile`](../webserver/Dockerfile) it starts with `FROM tutum/nginx`. There was an error encountered when building this container without a cached tutum/nginx image. This is fixable by pulling the image before building - i.e. by running `docker pull IMAGE` where `IMAGE` = the exact image which docker was searching for. For me this image was: `docker.io/tutum/nginx@sha256:69a727916ab40de88f66407fb0115e35b759d7c6088852d901208479bec47429`. Link to GitHub issue explaining it: [LINK](https://github.com/moby/buildkit/issues/2033).
+
 ## Linux
 
 ### OS version
