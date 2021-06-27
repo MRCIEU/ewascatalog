@@ -44,7 +44,10 @@ def lookup(text):
 def label(efo):
     """ Retrieve the EFO term label. """
     url = 'https://www.ebi.ac.uk/ols/api/ontologies/efo/terms?iri=http://www.ebi.ac.uk/efo/'+efo
-    response = requests.get(url).json()
+    try:
+        response = requests.get(url).json()
+    except:
+        return ""
     if 'error' in response.keys():
         return ""
     return response['_embedded']['terms'][0]['label']
