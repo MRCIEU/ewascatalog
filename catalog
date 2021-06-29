@@ -42,8 +42,8 @@ start_catalog() {
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} up -d"
 }
 create_database() {
-    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash create-annotations.sh /files'"
-    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash create.sh settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash create-annotations.sh /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash create.sh settings.env /files'"
 }
 update_website() {
     install_website
@@ -57,15 +57,15 @@ update_webserver() {
 }
 update_database() {
     base_dir=`pwd`
-    # cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash generate-zenodo-doi.sh settings.env /files'"
-    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash add-to-ewas.sh settings.env /files'"
+    # cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash generate-zenodo-doi.sh settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash add-to-ewas.sh settings.env /files'"
     cd $base_dir; update_website
 }
 prep_inhouse_data() {
-    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash prep-inhouse-data.sh settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash prep-inhouse-data.sh settings.env /files'"
 }
 check_new_upload() {
-    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash prep-new-data.sh settings.env /files'"
+    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code; bash prep-new-data.sh settings.env /files'"
 }
 stop_catalog() {
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} stop"
