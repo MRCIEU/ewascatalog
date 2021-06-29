@@ -31,6 +31,7 @@ copy_database() {
 }
 build_catalog() {
     mkdir -p ${RUNNING_DIR}
+    cp ${SETTINGS} ${RUNNING_DIR}
     install_website
     copy_docker
     copy_webserver
@@ -56,7 +57,7 @@ update_webserver() {
 }
 update_database() {
     base_dir=`pwd`
-    cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash generate-zenodo-doi.sh settings.env /files'"
+    # cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash generate-zenodo-doi.sh settings.env /files'"
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} exec db bash -c 'cd /code/database; bash add-to-ewas.sh settings.env /files'"
     cd $base_dir; update_website
 }
