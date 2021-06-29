@@ -28,7 +28,7 @@ if (!file.exists(file.path(inhouse_dir, sfile))) {
 res_files <- list.files(res_dir)
 if (any(duplicated(res_files))) stop("There are duplicated results files, please rename the files!")
 
-studies <- readxl::read_excel(file.path(inhouse_dir, sfile), sheet="data")
+studies <- readxl::read_excel(file.path(inhouse_dir, sfile), sheet="data", guess_max = 1e6)
 cpg_annotations <- data.table::fread(file.path(file_dir, "cpg_annotation.txt"))
 # ----------------------------------------------------
 # Functions to check data
@@ -145,8 +145,8 @@ load_results_file <- function(file, res_dir)
     res_file_path <- file.path(res_dir, file)
     if (!file.exists(res_file_path)) stop("Results file not present!")
     res <- read.csv(res_file_path)
-    stop_msg <- paste("Results columns don't match template. Here are your results columns: ", paste(colnames(res), collapse = ", "))
     res <- res[, !grepl("^X", colnames(res))] # sometimes empty extra columns are added
+    stop_msg <- paste("Results columns don't match template. Here are your results columns: ", paste(colnames(res), collapse = ", "))
     if (any(colnames(res) != results_cols)) stop(stop_msg)
     
     res <- res[res$CpG != "", ] # sometimes CpG column can be filled with empty cells
@@ -313,7 +313,7 @@ old_studies$StudyID <- unlist(lapply(1:nrow(old_studies), function(x) generate_s
 # ----------------------------------------------------
 
 # Check studies file column names
-if (!all(colnames(studies) == template_study_cols)) {
+if (!all(colnames(studies) %in% template_study_cols)) {
     stop("Studies file column names do not match the template columns")
 }
 
