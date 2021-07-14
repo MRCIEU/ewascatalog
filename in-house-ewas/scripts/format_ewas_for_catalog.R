@@ -163,3 +163,6 @@ write.csv(studies_full, file = file.path(derived_path, "studies-full.csv"),
 write.xlsx(studies, file = file.path(derived_path, "studies.xlsx"), 
 		   sheetName = "data")
 
+# zip the full_stats folder
+setwd(derived_path)
+system("tar -zcvf full_stats.tar.gz full_stats/")
