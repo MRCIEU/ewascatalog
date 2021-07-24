@@ -28,7 +28,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, "settings.env"))
 SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ewascatalog.org', 'www.ewascatalog.org', 'it054408.users.bris.ac.uk', '172.17.0.3']
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

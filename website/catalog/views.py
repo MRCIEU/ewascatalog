@@ -7,8 +7,10 @@ from ratelimit.decorators import ratelimit
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-from . import firstquery, finalquery, database, upload, constants
+from . import firstquery, finalquery, database, upload, constants, query
 from .forms import DocumentForm
 
 
@@ -113,3 +115,28 @@ def catalog_api(request):
         return ret.json()
     else:
         return JsonResponse({})
+
+## VERY BASIC!! NEED SOMETHING SIMILAR, BUT BETTER
+@api_view()
+def catalog_api_studies(request):
+    db = database.api_connection()
+    q = request.GET
+    category = next(iter(q.keys()))
+    value = q[category]
+    # return Response({value})
+    if value == "studies":
+        ## Requires q to be query=studies
+        sql = """SELECT * FROM studies;"""
+        tab = query.response(db, sql)    
+        return Response({'results':tab.data, 'fields':tab.cols})
+    else:
+        ret = finalquery.execute(db, q, constants.PVALUE_THRESHOLD)
+        if isinstance(ret, finalquery.response):
+            return ret.json()
+        else:
+            return Response({})
+
+
+
+
+

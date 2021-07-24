@@ -13,3 +13,11 @@ def default_connection():
     dbname = settings.DATABASES['default']['NAME']
     return MySQLdb.connect(host=dbhost,user=dbuser,password=dbpassword,db=dbname)
     return(db)
+
+def api_connection():
+    dbhost = settings.DATABASES['default']['HOST']
+    dbuser = settings.DATABASES['default']['USER']
+    dbpassword = settings.DATABASES['default']['PASSWORD']
+    dbname = settings.DATABASES['default']['NAME']
+    return MySQLdb.connect(host=dbhost,user=dbuser,password=dbpassword,db=dbname,charset='utf8')
+    return(db)

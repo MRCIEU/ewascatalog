@@ -19,6 +19,7 @@ from catalog import query
 from catalog import efo
 import time
 from django.http import JsonResponse
+from rest_framework.response import Response
 
 from . import objects
 
@@ -118,7 +119,7 @@ class response(query.response):
     def json(self):
         """ Subsets query table and returns as a JSON response object. """
         tab_copy = subset_tsv_cols(self)
-        return JsonResponse({'results':tab_copy.data, 'fields':tab_copy.cols})
+        return Response({'results':tab_copy.data, 'fields':tab_copy.cols})
 
 
 def round_sig(x, sig=2):
