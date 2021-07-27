@@ -29,13 +29,16 @@ copy_database() {
     cp -r database ${RUNNING_DIR}
     cp ${SETTINGS} ${RUNNING_DIR}/database
 }
-build_catalog() {
+prep_files() {
     mkdir -p ${RUNNING_DIR}
     cp ${SETTINGS} ${RUNNING_DIR}
     install_website
     copy_docker
     copy_webserver
     copy_database
+}
+build_catalog() {
+    prep_files
     cd ${RUNNING_DIR}; eval "${DOCKER_COMPOSE} build"
 }
 start_catalog() {
@@ -75,7 +78,9 @@ delete_catalog() {
 }
 
 
-if [ ${CMD} = "build" ]; then
+if [ ${CMD} = "prep" ]; then
+    prep_files
+elif [ ${CMD} = "build" ]; then
     build_catalog
 elif [ ${CMD} = "start" ]; then
     start_catalog
@@ -106,6 +111,7 @@ Error: Invalid command
 Usage: 
     catalog CMD
 where CMD is one of the following:
+    prep:             prep folder for building containers
     build:            build the catalog docker container
     start:            start the catalog running
     create-database:  construct the catalog database
