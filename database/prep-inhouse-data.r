@@ -212,6 +212,7 @@ master_sort_function <- function(studies_dat)
     res$StudyID <- studies_dat$StudyID <- sid
     full_res <- dplyr::left_join(res, cpg_annotations, by = c("CpG" = "CpG"))
     full_res <- dplyr::filter(full_res, P < 1e-4)
+    if (nrow(full_res) == 0) message("No results for: ", sid) return(NULL)    
     full_res <- full_res[, c("CpG", "Location", "Chr", "Pos", "Gene", "Type", "Beta", "SE", "P", "Details", "StudyID")]
     sid_dir <- file.path(out_dir, sid)
     make_directory(dir_to_make = sid_dir)
