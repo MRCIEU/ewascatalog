@@ -72,7 +72,7 @@ threshold
 ## plot heatmap of log.p
 source("heatmap-function.r")
 
-CairoPNG(file.path(output.dir, "cell-counts-and-variables.png"),
+CairoPNG(file.path(output.dir, "heatmap.png"),
          width=16384, height=16384)
 plot.new()
 grid.clip()
