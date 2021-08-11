@@ -1,13 +1,3 @@
-alter table studies
-  add column assocs int;
-
-update studies left join (
-  select study_id, count(distinct(cpg)) as assocs
-  from results 
-  group by study_id
-) study_assocs on study_assocs.study_id = studies.study_id
-set studies.assocs = study_assocs.assocs;
-
 alter table results
  add column p_rank int;
 
