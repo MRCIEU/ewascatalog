@@ -2,6 +2,8 @@ output.dir <- "output-20210811"
 
 top.n <- 1000 ## p_rank in sql query <= 1000
 
+library(Cairo)
+
 ##devtools::install_github("perishky/eval.save")
 library(eval.save)
 eval.save.dir(".eval")
@@ -52,9 +54,11 @@ threshold <- -log(0.05/length(log.p)*2, 10)
 ## plot heatmap of log.p
 source("heatmap-function.r")
 
-pdf(file.path(output.dir, "cell-counts-and-variables.pdf"))
+CairoPNG(file.path(output.dir, "cell-counts-and-variables.png"),
+         width=1024, height=1024)
 plot.new()
 grid.clip()
+
 cols <- heatmap.color.scheme(low.breaks=seq(0,threshold,length.out=50),
                              high.breaks=seq(threshold,max(log.p,na.rm=T),length.out=50))
 h.out <- heatmap.simple(log.p,
@@ -64,10 +68,7 @@ h.out <- heatmap.simple(log.p,
 			na.color="gray",
 			scale="none",
                         title="...")
- #h.marks <- matrix(0, ncol=ncol(log.p), nrow=nrow(log.p))
- #h.marks[log.p < threshold] <- 1
- #heatmap.mark(h.out, h.marks, mark="box")
- dev.off()
+ dev.off() ## 5 minutes
 
 
 log.p[is.na(log.p)] <- 0
