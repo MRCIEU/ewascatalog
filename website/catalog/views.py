@@ -84,25 +84,7 @@ def catalog_download(request):
 @never_cache
 def catalog_upload(request):
     clear_directory(constants.TMP_DIR)
-    db = database.default_connection()
-    if request.method == 'POST':
-        form = upload.create_form(db, request.POST, request.FILES)
-        if form.is_valid():
-            response = upload.process(db, request.FILES['results'], request.POST.copy())
-            if "error" in response.keys():
-                return render(request, 'catalog/catalog_bad_upload_message.html', {
-                    'x': response['error']
-                })
-            else:
-                return render(request, 'catalog/catalog_upload_message.html', {
-                    'email': response['email'], 
-                    'zenodo_msg': response['zenodo_msg']
-                })
-    else:
-        form = upload.create_form(db)
-    return render(request, 'catalog/catalog_upload.html', {
-        'form': form
-    })
+    return render(request, 'catalog/catalog_upload.html')
 
 @ratelimit(key='ip', rate='1000/h', block=True)
 def catalog_api(request):

@@ -4,22 +4,8 @@
 {% load static %}
 <div id="Upload" class="information">
    <h1>Upload</h1>
-   <p>To upload data please fill in the details below and upload a results file using the template as a guide. If the results file you upload does not match the format of our template the upload will fail. If you cannot fill in certain fields then leave them blank. If you want your full dataset to be made available via <a href="https://zenodo.org/" target="_blank">Zenodo</a> and for a doi to be generated for the data then please fill in the three fields at the end of the form: "Title of Manuscript", "Description for Zenodo", "All Authors". Click <a href="https://zenodo.org/record/4031387" target="_blank">here</a> to be taken to an example of a dataset uploaded to Zenodo via The EWAS Catalog pipeline. If you have any problems filling in the form, please email The EWAS Catalog team at <a href="mailto:ewascatalog@outlook.com">ewascatalog@outlook.com</a>.</p>
-   <p><b>* = required field.</b></p>
-    <a href="{% static "" %}/docs/results_template.csv" download style="font-size : 12pt" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download results file template</a>
-   <p>&nbsp;</p>
-</div>
-
-<div class="catalog">
-   <form method="POST" enctype="multipart/form-data">
-   	  {% csrf_token %}
-      {% for field in form %}
-         <div>
-            {{ field.label_tag }} {{ field.help_text }} 
-            <p> {{ field }} </p> 
-         </div>
-      {% endfor %}
-      <button type="submit">Submit</button>
+   <p>If you would like to have your EWAS added to the The EWAS Catalog, you can simply fill out an online form to describe each EWAS in your publication (the meta-data) and upload corresponding summary statistics. To access the meta-data form and upload your summary statistics, please email The EWAS Catalog team at <a href="mailto:ewascatalog@outlook.com">ewascatalog@outlook.com</a>.</p> 
+   <p>Through this upload process, you also have the option to make your full summary statistics available, and citable, via <a href="https://zenodo.org/" target="_blank">Zenodo</a>. This can be indicated on the meta-data form. The EWAS Catalog team will sort this out and send you the DOI corresponding to your dataset. Click <a href="https://zenodo.org/record/4031387" target="_blank">here</a> to be taken to an example of a dataset uploaded to Zenodo via The EWAS Catalog pipeline.</p>
 </div>
 
 {% endblock %}
