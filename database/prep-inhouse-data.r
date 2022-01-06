@@ -145,6 +145,7 @@ load_results_file <- function(file, res_dir)
     res_file_path <- file.path(res_dir, file)
     if (!file.exists(res_file_path)) stop("Results file not present!")
     res <- read.csv(res_file_path)
+    colnames(res)[colnames(res) == "X...CpG"] <- "CpG"
     res <- res[, !grepl("^X", colnames(res))] # sometimes empty extra columns are added
     stop_msg <- paste("Results columns don't match template. Here are your results columns: ", paste(colnames(res), collapse = ", "))
     if (any(colnames(res) != results_cols)) stop(stop_msg)
@@ -212,7 +213,10 @@ master_sort_function <- function(studies_dat)
     res$StudyID <- studies_dat$StudyID <- sid
     full_res <- dplyr::left_join(res, cpg_annotations, by = c("CpG" = "CpG"))
     full_res <- dplyr::filter(full_res, P < 1e-4)
-    if (nrow(full_res) == 0) message("No results for: ", sid) return(NULL)    
+    if (nrow(full_res) == 0) {
+        message("No results for: ", sid)
+        return(NULL)
+    }
     full_res <- full_res[, c("CpG", "Location", "Chr", "Pos", "Gene", "Type", "Beta", "SE", "P", "Details", "StudyID")]
     sid_dir <- file.path(out_dir, sid)
     make_directory(dir_to_make = sid_dir)
