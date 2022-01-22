@@ -110,6 +110,8 @@ generate_study_id <- function(studies)
     trait_nam <- gsub("(?!-)[[:punct:]]", "_", trait_nam, perl=TRUE)
     if (is.na(df$PMID)) {
         pmid <- NULL
+    } else if (is.na(as.numeric(df$PMID))) {
+        pmid <- NULL
     } else {
         pmid <- df$PMID
     }
