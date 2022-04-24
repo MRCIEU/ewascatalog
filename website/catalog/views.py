@@ -19,9 +19,16 @@ def clear_directory(directory):
         if datetime.datetime.now() - file_modified > datetime.timedelta(hours=5):
             os.remove(curpath)
 
+def get_database_mod_date():
+    studies_file = constants.BASE_DIR + "/../files/ewas-sum-stats/combined_data/studies.txt"
+    mod_dt = datetime.datetime.fromtimestamp(os.path.getmtime(studies_file))
+    date = str(mod_dt.year) + "-" + str(mod_dt.month) + "-" + str(mod_dt.day)
+    return date
+
 @never_cache
 def catalog_home(request):
     clear_directory(constants.TMP_DIR)
+    db_date = get_database_mod_date()
     keys = request.GET.keys()
     if len(keys) > 0:
         if "query" in keys:
@@ -29,7 +36,7 @@ def catalog_home(request):
         else:
             return finalquery_response(request)
     else:
-        return render(request, 'catalog/catalog_home.html', {})
+        return render(request, 'catalog/catalog_home.html', {'db_date': db_date})
 
 def firstquery_response(request):
     query = request.GET
