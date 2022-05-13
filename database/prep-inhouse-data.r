@@ -48,6 +48,7 @@ check_nchar <- function(dat, max_nchars, stud_dat)
         lapply(var, function(x) {
             all_vals <- as.character(dat[[x]])
             if (all(is.na(all_vals))) return(NULL)
+            all_vals[is.na(all_vals)] <- 0
             if (any(nchar(all_vals) > n)) {
                 stop(paste("A value in the", x, "column in the data is too long", 
                           "please make sure it is", n, "characters or fewer."))
