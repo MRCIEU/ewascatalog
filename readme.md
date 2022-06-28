@@ -18,9 +18,11 @@ Files are divided into the following directories:
 - `database`: scripts for creating and populating the database from data found in the `FILES_DIR` (see below)
 - `docker`: initialization files and scripts for installing the website and database within a docker container
 - `webserver`: configuration files for the webserver
-- `r-package`: R package for accessing the database
 - `logo`: logo graphics files
 - `in-house-ewas`: Scripts and instructions for EWAS performed by us
+
+The EWAS catalog can be accessed via R using the 
+the [EWAS catalog R package](https://github.com/MRCIEU/ewascatalog-r).
 
 ## Environment
 
