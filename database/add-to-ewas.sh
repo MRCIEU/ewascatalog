@@ -8,6 +8,9 @@ source ${SETTINGS}
 ROOT_CMD="mysql -uroot -p${MYSQL_ROOT_PASSWORD}"
 USER_CMD="mysql -u${DATABASE_USER} -p${DATABASE_PASSWORD}"
 
+today=$(date +'%Y-%m-%d')
+# printf "%s\t %s" "Date" "EWAS Added" >> ${FILE_DIR}/log-file.tsv
+
 # put the data in the database
 while read id; do
 	echo "$id"
@@ -30,7 +33,15 @@ while read id; do
 	tail -n +2 -q ${FILE_DIR}/ewas-sum-stats/study-data/${id}/studies.txt >> ${FILE_DIR}/ewas-sum-stats/combined_data/studies.txt
 	tail -n +2 -q ${FILE_DIR}/ewas-sum-stats/study-data/${id}/results.txt >> ${FILE_DIR}/ewas-sum-stats/combined_data/results.txt
 
+	# Add study ID to log file
+	printf "\n%s\t %s" $today $id >> ${FILE_DIR}/log-file.tsv
+
 done <${FILE_DIR}/ewas-sum-stats/studies-to-add.txt
+
+# Add N EWAS to short log file
+# printf "%s\t %s" "Date" "N EWAS Added" >> ${FILE_DIR}/short-log-file.tsv
+n_ewas=$(wc -l < ${FILE_DIR}/ewas-sum-stats/studies-to-add.txt)
+printf "\n%s\t %s" $today $n_ewas >> ${FILE_DIR}/short-log-file.tsv
 
 # Remove all studies from "studies-to-add.txt"
 > ${FILE_DIR}/ewas-sum-stats/studies-to-add.txt
