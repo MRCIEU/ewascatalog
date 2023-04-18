@@ -1,0 +1,89 @@
+#!/bin/python 
+
+import os
+from datetime import date
+
+wd = os.getcwd()
+today = date.today()
+
+sfile = wd + "/data/studies" + str(today) + ".txt.gz"
+rfile = wd + "/data/results" + str(today) + ".txt.gz"
+
+rule all:
+	input:
+		"data/installed-pacakges.RData",
+		sfile, 
+		wd + "/data/inclusion-criteria-checks.RData", 
+		wd + "/data/bad-efos.RData", 
+		wd + "/data/bad-ids.RData", 
+		wd + "/data/bad-dates.RData", 
+		wd + "/report/catalog-data-check-" + str(today) + ".html"
+
+rule download_files:
+	output:
+		studies = sfile, 
+		results = rfile
+	params:
+		studies = "http://www.ewascatalog.org/static//docs/ewascatalog-studies.txt.gz",
+		results = "http://www.ewascatalog.org/static//docs/ewascatalog-results.txt.gz"
+	shell:
+		"rm -f data/studies*; rm -f data/results*; wget -t 10 -O {output.studies} {params.studies}; wget -t 10 -O {output.results} {params.results}"
+
+rule install_packages:
+	input:
+		script = "R/install-packages.R",
+		r_pkgs = "data/r-packages.csv"
+	output:
+		wd + "/data/installed-pacakges.RData"
+	shell:
+		"echo $HOSTNAME; Rscript {input.script} '{input.r_pkgs}' '{output}'"
+
+rule efo:
+	input:
+		script = "R/efo-term-check.R", 
+		studies = sfile,
+	output:
+		wd + "/data/bad-efos.RData"
+	shell:
+		"echo $HOSTNAME; Rscript {input.script} '{input.studies}' '{output}'"
+
+rule ids:
+	input:
+		script = "R/check-ids.R", 
+		studies = sfile,
+		results = rfile
+	output:
+		wd + "/data/bad-ids.RData"
+	shell:
+		"echo $HOSTNAME; Rscript {input.script} '{input.studies}' '{input.results}' '{output}'"
+
+rule dates:
+	input:
+		script = "R/check-dates.R",
+		studies = sfile,
+	output:
+		wd + "/data/bad-dates.RData"
+	shell:
+		"echo $HOSTNAME; Rscript {input.script} '{input.studies}' '{output}'"
+
+rule inclusion_criteria:
+	input:
+		script = "R/check-inclusion-criteria.R", 
+		studies = sfile,
+		results = rfile
+	output:
+		wd + "/data/inclusion-criteria-checks.RData"
+	shell:
+		"echo $HOSTNAME; Rscript {input.script} '{input.studies}' '{input.results}' '{output}'"
+
+rule report:
+	input:
+		report = wd + "/report/catalog-data-check.Rmd", 
+		efos = wd + "/data/bad-efos.RData", 
+		ids = wd + "/data/bad-ids.RData", 
+		dates = wd + "/data/bad-dates.RData", 
+		criteria = wd + "/data/inclusion-criteria-checks.RData"
+	output:
+		wd + "/report/catalog-data-check-" + str(today) + ".html"
+	shell:
+		"echo $HOSTNAME; Rscript -e \"rmarkdown::render('{input.report}', output_file='{output}', output_format='all', params=list(efos = '{input.efos}', ids = '{input.ids}', dates = '{input.dates}', criteria = '{input.criteria}'))\""

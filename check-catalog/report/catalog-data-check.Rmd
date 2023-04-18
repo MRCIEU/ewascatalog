@@ -1,0 +1,192 @@
+---
+title: EWAS Catalog data checks
+author: Thomas Battram
+date: "`r Sys.Date()`"
+output:
+  bookdown::html_document2:
+    toc: true
+    toc_float: true
+    theme: united
+    number_sections: false
+    code_folding: hide
+params:
+  efos: ""
+  ids: ""
+  dates: ""
+  criteria: ""
+---
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+
+## pkgs
+suppressWarnings(suppressPackageStartupMessages({
+library(bookdown) # extra markdown options
+library(knitr) # ...
+library(kableExtra) # extra nice tables
+library(tidyverse) # tidy code and data
+library(RColorBrewer) # for plotting colours
+library(usefunc) # own package of useful functions
+}))
+
+knitr::opts_chunk$set(echo = FALSE, 
+                  warning = FALSE, 
+                  message = TRUE, 
+                  cache = FALSE, 
+                  dpi = 300 
+                  )
+```
+
+
+```{r general-setup}
+# params <- list(efos = "data/bad-efos.RData", ids = "data/bad-ids.RData", dates = "data/bad-dates.RData", criteria = "data/inclusion-criteria-checks.RData")
+for (i in names(params)) {
+    temp <- new_load(params[[i]])
+    assign(i, temp)
+}
+
+make_table <- function(tab, columns = NA, cap = NULL, footy = NA)
+{
+    if (!is.na(columns)) tab <- tab %>% dplyr::select(one_of(columns))
+    tidy_tab <- tidy_colnames(tab)
+    kab <- kbl(tidy_tab, caption = cap) %>%
+        kable_styling()
+    if (!is.na(footy)) kab <- kab %>% footnote(general = footy, general_title = "", footnote_as_chunk = T)
+    if (nrow(tidy_tab) > 10) kab <- kab %>% scroll_box(width = "100%", height = "450px")
+    return(kab)
+}
+
+```
+
+## Intro
+
+This report details some checks of the data within The EWAS Catalog. The most serious issues that need to be fixed asap if they occur are:
+
+1. The results data can't be correct - i.e. P value or SE is negative or CpG name doesn't begin with a 'c'
+2. The data greatly violates the inclusion criteria - e.g. N = 10 or P = 0.5  
+3. If there are duplicated unique identifiers (StudyIDs). 
+
+## Overall checks
+
+```{r overall-checks}
+out <- tibble(dup = nrow(ids$dup_studies), 
+              pmids = nrow(ids$no_pmid_studies),
+              efos = nrow(efos$bad_efo_studies),  
+              dates = nrow(dates$bad_date_studies), 
+              high_p_studies = criteria$n_high_p_studies, 
+              high_p_results = criteria$n_high_p_results,
+              low_n = nrow(criteria$low_n_studies), 
+              cpg_name = length(unique(criteria$bad_cpg_ids)), 
+              neg_p = length(unique(criteria$neg_p_ids)),
+              neg_se = length(unique(criteria$neg_se_ids))
+              )
+make_table(out, cap = "Overall checks", footy = "dup = number of duplcated study IDs, 
+  pmids = number of studies without pmids, 
+  efos = number of studies with potentially false EFO terms, 
+  dates = number of studies with the wrong date format, 
+  high-p-studies = number of studies with any results P > 1x10-4, 
+  high-p-results = number of results with P > 1x10-4, 
+  low-n = number of studies with N < 100, 
+  cpg-name = number of studies with results that have CpG names that don't start with a 'c', 
+  neg-p = number of studies with negative P values in results, 
+  neg-se = number of studies with negative SE in results")
+```
+
+## IDs
+
+```{r duplicated-studies}
+if (nrow(ids$dup_studies) == 0) {
+    message("There are no duplicated studies - woop woop!")
+} else {
+    make_table(ids$dup_studies, 
+           columns = c("Author", "PMID", "Trait", "Analysis", "StudyID"), 
+           cap = "Duplicated studies")    
+}
+```
+
+```{r pmid-studies}
+if (nrow(ids$no_pmid_studies) == 0) {
+    message("Apart from the EWAS in ARIES, there are no studies without PMIDs - woop woop!")    
+} else {
+    make_table(ids$no_pmid_studies, 
+               columns = c("Author", "PMID", "Trait", "Analysis", "StudyID"), 
+               cap = "Studies without a PMID that aren't in-house EWAS")  
+}
+```
+
+## EFOs
+
+The EFOs that might not exist are: __`r unique(efos$bad_efos)`__. Double check this at: https://www.ebi.ac.uk/efo/. The studies linked to these are below
+
+```{r efo-studies}
+if (nrow(efos$bad_efo_studies) == 0) {
+    message("There are no studies with EFOs that are not present in the EBI database - woop woop!")    
+} else {
+    make_table(efos$bad_efo_studies, 
+               columns = c("Author", "PMID", "Trait", "EFO", "StudyID"), 
+               cap = "Studies with EFOs that were not in the EFO database")  
+}
+```
+
+## Dates
+
+```{r date-studies}
+if (nrow(dates$bad_date_studies) == 0) {
+    message("All studies have dates that match the yyyy-mm-dd format - woop woop!")    
+} else {
+    make_table(dates$bad_date_studies, 
+               columns = c("Author", "PMID", "Date", "StudyID"), 
+               cap = "Studies with dates are not in the format yyyy-mm-dd")  
+}
+```
+
+<br>
+
+Any dates that are missing need to be filled in manually. If there are faults in the format of the date you can use the example code below to change the dates:
+
+```{r change-dates-example, eval = FALSE, echo = TRUE}
+
+library(tidyverse)
+library(lubridate)
+
+## get data
+studies_file <- "" # enter studies file location here
+studies <- read_tsv(studies_file, guess_max=1e6)
+
+n_missing <- sum(is.na(studies$Date))
+
+## Code below works if dates are in format dd/mm/yyyy - change accordingly 
+yearmd <- ymd(studies$Date)
+daymy <- dmy(studies$Date) 
+yearmd[is.na(yearmd)] <- daymy[is.na(yearmd)]
+
+## Update the studies file
+studies$Date <- yearmd
+
+## Check still same number of missing vals
+stopifnot(sum(is.na(studies$Date)) == n_missing)
+
+## Write out the studies file
+outfile <- "" # enter output file location here
+write.table(studies, file = outfile, row.names = F, col.names = T, quote = F, sep = "\t")
+
+```
+
+## Inclusion criteria
+
+The number of studies and results with at least one high P value (P > 1x10^-4^) and the number of studies with a low N (N < 100) can be seen in __Table \@ref(tab:overall-checks)__. The studies with a low N can be seen below.
+
+```{r lown-studies}
+if (nrow(criteria$low_n_studies) == 0) {
+    message("No studies have N < 100 - woop woop!")    
+} else {
+    out <- criteria$low_n_studies %>% arrange(N)
+    make_table(out, 
+               columns = c("Author", "PMID", "Trait", "Analysis", "N", "StudyID"), 
+               cap = "Studies with N < 100")  
+}
+```
+
+<br>
+
+The number of full studies that would be removed if we removed all results with P > 1x10^-4^ = `r criteria$n_rm_high_p_studies`.
+
