@@ -6,3 +6,6 @@ published-data-extraction/recruits-data/*
 !published-data-extraction/recruits-data/data-checklist.xlsx
 **/.DS_Store
 published-data-extraction/epigenetics-journal-club
+check-catalog/data/*
+!check-catalog/data/r-packages.csv
+check-catalog/.snakemake/
