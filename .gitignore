@@ -1,0 +1,8 @@
+published-data-extraction/external-data/data
+published-data-extraction/external-data/emails
+published-data-extraction/data-to-enter/
+published-data-extraction/recruits-data/*
+!published-data-extraction/recruits-data/recruits.txt
+!published-data-extraction/recruits-data/data-checklist.xlsx
+**/.DS_Store
+published-data-extraction/epigenetics-journal-club
