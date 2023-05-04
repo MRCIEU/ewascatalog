@@ -25,10 +25,14 @@ results <- read_tsv(local_results_file)
 # ------------------------------------------------------------
 
 ## This is very important before making changes!!
-if (!all.equal(web_studies, studies)) {
-	stop("Local studies and downloadable studies from the website are not the same!")
-} else if (!all.equal(results, web_results)) {
-	stop("Local results and downloadable results from the website are not the same!")
+stud_ae <- all.equal(web_studies, studies)
+res_ae <- all.equal(web_results, results)
+if (!isTRUE(stud_ae)) {
+	stop("Local studies and downloadable studies from the website are not the same!\n",
+		  "output from all.equal() is:\n", stud_ae)
+} else if (!isTRUE(res_ae)) {
+	stop("Local results and downloadable results from the website are not the same!\n",
+		  "output from all.equal() is:\n", res_ae)
 } else {
 	message("All goooood")
 	rm(list = c("web_results", "web_studies"))
@@ -44,7 +48,9 @@ if (!all.equal(web_studies, studies)) {
 # PMID fixes
 # ------------------------------------------------------------
 
+studies[studies$Author == "Rijlaarsdam J",]
 studies[studies$Author == "Rijlaarsdam J" & is.na(studies$PMID), "PMID"] <- "33494854"
+studies[studies$Author == "Sammallahti S",]
 studies[studies$Author == "Sammallahti S" & is.na(studies$PMID), "PMID"] <- "33414500"
 
 # ------------------------------------------------------------
