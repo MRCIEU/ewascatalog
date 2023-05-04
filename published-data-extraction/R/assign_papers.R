@@ -40,7 +40,7 @@ data_this_month <- input_data %>%
 # assign papers to one person from this month
 # ----------------------------------------------------
 
-create_folder <- function(folder) system(paste0("mkdir -p ", folder))
+create_folder <- function(folder) system(paste0("mkdir -p ", "'", folder, "'"))
 
 # change individual if needs be
 ind <- "Paul Yousefi"

@@ -13,7 +13,7 @@ library(tidyverse) # tidy code and data
 library(readxl) # reading excel files
 library(openxlsx) # writing excel files
 
-create_folder <- function(folder) system(paste0("mkdir -p ", folder))
+create_folder <- function(folder) system(paste0("mkdir -p ", "'", folder, "'"))
 
 # data path
 dat_path <- "data-to-enter"
@@ -71,7 +71,7 @@ checked_data$date <- as.Date(checked_data$date)
 # extract data
 # --------------------------------------------
 jc_papers_clean <- jc_papers %>%
-	dplyr::filter(`EWAS catalog` == "Yes") %>%
+	dplyr::filter(EC == "Yes") %>%
 	mutate(Date = as.Date(as.character(Date), format = "%Y%m%d")) %>%
 	rename(PMID = `Paper ID`) %>%
 	dplyr::filter(!PMID %in% as.character(checked_data$pmid)) %>%

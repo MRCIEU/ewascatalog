@@ -1,14 +1,8 @@
 # readme
 
-Files and docs kept locally for published data extraction. Not all data is backed up, but will be present in the ewas catalog, which has it's data stored on the RDSF. Data extracted by the paid recruits or the data extraction team will also be present (from May 2020), and will be present on the ewas catalog [sharepoint site](https://uob.sharepoint.com/teams/grp-ewas-catalog). 
+Files and docs kept locally for published data extraction. Data extracted by the paid recruits or the data extraction team will be present (from May 2020), and will be present on the ewas catalog [sharepoint site](https://uob.sharepoint.com/teams/grp-ewas-catalog). 
 
 Below we have the workflow for data extraction and the workflow getting data from authors of recent EWAS and below that are the directories and what they contain.
-
-## Jotform note
-
-This is where individuals get re-directed when adding multiple EWAS to the jotform.
-
-https://form.jotform.com/211644540717049?firstAuthor={firstAuthor}&cohortsOr={cohortsOr}&pubmedId={pubmedId}&date={date}&wasDna12={wasDna12}&dnaMethylation13={dnaMethylation13}&technologyUsed21={technologyUsed21}&pleaseSpecify={pleaseSpecify}&tissue={tissue}&furtherDetails={furtherDetails}&nCohorts={nCohorts}&ageGroup={ageGroup}&sex={sex}&ancestryselect={ancestryselect}&uploadData33={uploadData33}&titleOf35={titleOf35}&descriptionFor={descriptionFor}&authorsOf={authorsOf}&resultsFile92={resultsFile92}
 
 ## Data extraction workflow 
 
@@ -36,11 +30,11 @@ Use [`data-checklist.xlsx`](recruits-data/data-checklist.xlsx) to keep track of 
 
 1. Check they've uploaded some results - if not then contact them
 2. Run through [`convert-meta-data.sh`](shell/convert-meta-data.sh) in the `published-data-extraction` folder
-3. Quickly check the `studies.xlsx` and/or `studies-jotform.xlsx` spreadsheet and the `results/` they uploaded to see if they're in the correct format (lots of notes on this in the `guidance-docs` folder)
+3. Quickly check the `studies.xlsx` and/or `studies-jotform.xlsx` spreadsheet and the `results/` they uploaded to see if they're in the correct format (lots of notes on this on the sharepoint site)
 4. Remove any rows in the `papers-to-add...` file that aren't filled in (double check the data for these rows aren't in the studies.xlsx spreadsheet)
 5. If any studies haven't been finished then extract the data from these (would only be case if filling out the `studies.xlsx` spreadsheet rather than using jotform)
 6. Combine studies and results files into one by running through [`combine-recruit-data.R`](R/combine-recruit-data.R)
-7. Copy the data from `recruits-data/combined-data/DATE/` to `"FILE_DIR/ewas-sum-stats/inhouse-data/"` (local directory to test the catalog)
+7. Copy the data from `recruits-data/combined-data/DATE/` to `FILE_DIR/ewas-sum-stats/inhouse-data/` (local directory to test the catalog)
 8. Change directory to the local ewas catalog web app directory and run `bash catalog prep-inhouse-data` - This will prepare the new data and output a file `"FILE_DIR/ewas-sum-stats/inhouse-data/failed_studies_DATE.tsv"` with any failed entries. 
 9. Deal with failed entries
 10. Then Run `bash catalog update-database` - This will add the new entries to the database.
@@ -78,6 +72,8 @@ Use [`data-checklist.xlsx`](recruits-data/data-checklist.xlsx) to keep track of 
 	+ Need to remove the category definitions from the "Age_group" column (i.e. the bits in brackets) and change the sheet name from "Data" to "data"
 9. Sort results files out so they can be uploaded to the catalog
 10. Follow steps 7-12 of [`Uploading data`](uploading-data)
+
+**NOTE: People may email ewascatalog@outlook.com if they are about to publish a paper and want us to put the data into the catalog and/or onto Zenodo. If this happens then follow steps 4-10 of the section above - just make a directory to put the data into before starting.**
 
 ## Directories/files
 

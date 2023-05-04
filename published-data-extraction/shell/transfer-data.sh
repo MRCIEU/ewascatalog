@@ -8,7 +8,7 @@ to_or_from=$1
 date=$2
 
 synced_dir="/Users/tb13101/University of Bristol/grp-ewas-catalog - data-deposit"
-unsynced_dir="/Users/tb13101/Desktop/projects/phd/ewas_catalog/published-data-extraction/recruits-data"
+unsynced_dir="/Users/tb13101/Desktop/projects/phd/ewas_catalog/local-webapp/ewascatalog/published-data-extraction/recruits-data"
 
 if [[ ! -d "${synced_dir}" ]]; then
 	echo "The sharepoint directory synced to a local space was not found"
