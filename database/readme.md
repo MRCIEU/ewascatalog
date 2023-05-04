@@ -20,31 +20,7 @@ the 'results' and 'studies' tables.
 
 ## Updating with new data
 
-### Uploading via ewascatalog.org/upload/
-This is a 3 step process:
-
-1. Input study data on the website (at [ewascatalog.org/upload]) and upload the results file
-   + Internally, the system (1) creates a folder with uploaded information and files in `${FILE_DIR}/ewas-sum-stats/to-add/` and then (2) runs `database/check-ewas-data.r` to check the upload and send a report to the uploader.
-   
-2. Run `bash catalog check-new-upload`
-   + Internally, runs `database/prep-new-data.sh` applying `database/prep-new-data.r` to the contents of each directory in `${FILES_DIR}/ewas-sum-stats/to-add`. For each new study, a study ID and QC report are generated and saved along with study information in a new folder `${FILES_DIR}/ewas-sum-stats/published/${STUDY_ID}`. The new study ID is then added to the file `${FILES_DIR}/ewas-sum-stats/studies-to-add.txt`. 
-
-3. Run `bash catalog update-database`
-   + Internally, for each study listed in `${FILES_DIR}/ewas-sum-stats/studies-to-add.txt`, a new Zenodo DOI is created and EWAS info uploaded to zenodo (`database/generate-zenodo-doi.sh` which runs `database/zenodo.py`), and the EWAS is added to the database (`database/add-to-ewas.sh`). 
-
-More details can be found [here](upload.md).
-
-### Uploading EWAS data generated in-house
-
-THIS NEEDS TO BE UPDATED!  
-
-
-
-**Note**: These scripts are written so that each creation
-command (create file/database/table) will be skipped if
-the file/database/table has already been created.
-If the item needs to be recreated, then it should be deleted.
-
+All information on how to upload new data to the database can be found in the [published-data-extraction](../published-data-extraction/readme.md) directory.
 
 ## Direct access to the database
 
@@ -71,6 +47,8 @@ ROOT_CMD="mysql -uroot -p${MYSQL_ROOT_PASSWORD}"
 ${ROOT_CMD} ${DB} -e "drop database ${DB}" 
 ## or just delete the cpgs table
 ${ROOT_CMD} ${DB} -e "drop table cpgs"
+## Show tables to decide which to delete
+${ROOT_CMD} ${DB} -e "show tables;"
 ## recreate anything that was deleted using updated code/data files
 bash catalog create-database
 ```
