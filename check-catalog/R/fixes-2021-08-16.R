@@ -12,10 +12,11 @@ library(tidyverse) # tidy code and data
 library(lubridate) # Date fixes
 
 ## data
+FILE_DIR <- ""
 web_studies <- read_tsv("http://www.ewascatalog.org/static//docs/ewascatalog-studies.txt.gz")
 web_results <- read_tsv("http://www.ewascatalog.org/static//docs/ewascatalog-results.txt.gz")
-local_studies_file <- "studies.txt"
-local_results_file <- "results.txt"
+local_studies_file <- file.path(FILE_DIR, "ewas-sum-stats/combined_data/studies.txt")
+local_results_file <- file.path(FILE_DIR, "ewas-sum-stats/combined_data/results.txt")
 studies <- read_tsv(local_studies_file)
 results <- read_tsv(local_results_file)
 
