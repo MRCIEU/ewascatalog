@@ -370,7 +370,7 @@ class study(catalog_object):
         return catalog_object.extract_value(text)
     def matches(db, text):
         text = study.extract_value(text)
-        return re.match("^[0-9]+(_.+|)$", text) 
+        return re.match("^[0-9]+(_.+|)$", text) or re.match("^[0-9.]+/.+", text) or re.match(".+_.+_.+", text)
     def retrieve_where(value):
         value = study.extract_value(value)
         return "studies.pmid='"+value+"' OR studies.study_id='"+value+"'"
