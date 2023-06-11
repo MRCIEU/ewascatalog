@@ -6,7 +6,6 @@ SETTINGS=$1
 FILE_DIR=$2
 
 source ${SETTINGS}
-# source ${FILE_DIR}/ewas-sum-stats/ewas-to-add.sh
 
 declare -a NEW_DATA=()
 

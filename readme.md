@@ -27,14 +27,41 @@ the [EWAS catalog R package](https://github.com/MRCIEU/ewascatalog-r).
 ## Environment
 
 Variables for the accessing the database can be found in `settings.env`.
-A copy is located here:
+
+Below is a censored version.
 ```
-/projects/MRC-IEU/research/projects/ieu1/wp2/004/working/scripts/ewascatalog2/settings.env
+DB=ewascatalog
+
+DATABASE_USER=ewas
+DATABASE_PASSWORD=...
+DATABASE_NAME=ewascatalog
+DATABASE_HOST=db
+DATABASE_PORT=...
+SECRET_KEY='...'
+DATABASE_URL=mysql://ewas:...@db:.../ewascatalog
+DATABASE_ROOT_PASSWORD=...
+
+MYSQL_ROOT_PASSWORD=...
+MYSQL_DATABASE=ewascatalog
+MYSQL_USER=ewas
+MYSQL_PASSWORD=...
+
+DOCKER_PASSWORD=...
+DOCKER_EMAIL=...
+
+DJANGO_EMAIL='ewascatalog@outlook.com'
+DJANGO_EMAIL_PASSWORD='...'
+
+ACCESS_TOKEN='...'
+SANDBOX_TOKEN='...'
+
+TWITTER_HANDLE=ewascatalog
+TWITTER_PASSWORD=...
 ```
 
 ## Running docker commands
 
-The system will run within a Docker container. 
+The system runs within a Docker container. 
 
 For a user to run docker commands,
 they will need to belong to the 'docker'
@@ -59,10 +86,6 @@ variables `FILES_DIR`, `WEBSITE_DIR` and `SETTINGS` in [catalog](catalog).
 
 `FILES_DIR` should provide the path to the directory
 containing catalog data files.
-A copy of this directory is here:
-```
-/projects/MRC-IEU/research/projects/ieu1/wp2/004/working/data/data-files-for-ewascatalog2
-```
 
 `WEBSITE_DIR` should provide the path to the base directory
 where the website files will be located on the host machine.
