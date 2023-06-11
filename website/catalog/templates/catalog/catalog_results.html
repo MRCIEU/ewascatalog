@@ -44,7 +44,11 @@
 		  <tr>
                   {% for col in row %}
 		    {% if forloop.counter == 2 %}
-		      <td><a href="https://pubmed.ncbi.nlm.nih.gov/{{col}}" target="_blank">{{col}}</a></td>
+	              {% if "/" in col %}
+	                <td><a href="https://doi.org/{{col}}" target="_blank">{{col}}</a></td>
+		      {% else %}
+			<td><a href="https://pubmed.ncbi.nlm.nih.gov/{{col}}" target="_blank">{{col}}</a></td>
+		      {% endif %}
 		    {% else %}
     		      <td>{{ col }}</td>
 		    {% endif %}
