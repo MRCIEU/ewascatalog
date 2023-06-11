@@ -41,7 +41,11 @@
           <span style="font-size: 75%">
             {% for key,value in query.details.items %}
 	      {% if key == "PMID" %}
-	      <b>{{key}}</b>:<a href="https://pubmed.ncbi.nlm.nih.gov/{{value}}" target="_blank">{{value}}</a> &nbsp;
+	        {% if "/" in value %}
+	          <b>{{key}}</b>:<a href="https://doi.org/{{value}}" target="_blank">{{value}}</a> &nbsp;
+		{% else %}
+	          <b>{{key}}</b>:<a href="https://pubmed.ncbi.nlm.nih.gov/{{value}}" target="_blank">{{value}}</a> &nbsp;
+		{% endif %}
 	      {% else %}
               <b>{{key}}</b>:{{value}}&nbsp;
 	      {% endif %}
