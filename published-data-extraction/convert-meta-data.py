@@ -20,9 +20,9 @@ print(sys.argv)
 # zen_outfile = "recruits-data/combined-data/2021-08-23/zen-file.xlsx"
 
 ## read in data
-studies = pd.read_excel(studies_file)
+studies = pd.read_excel(studies_file, engine='openpyxl')
 
-example_studies = pd.read_excel(example_file)
+example_studies = pd.read_excel(example_file, engine='openpyxl')
 example_cols = list(example_studies.columns)
 
 # ------------------------------------------------------------
