@@ -28,7 +28,7 @@ if (!file.exists(file.path(inhouse_dir, sfile))) {
 res_files <- list.files(res_dir)
 if (any(duplicated(res_files))) stop("There are duplicated results files, please rename the files!")
 
-studies <- readxl::read_excel(file.path(inhouse_dir, sfile), sheet="data", guess_max = 1e6)
+studies <- readxl::read_excel(file.path(inhouse_dir, sfile), sheet=1, guess_max = 1e6)
 cpg_annotations <- data.table::fread(file.path(file_dir, "cpg_annotation.txt"))
 # ----------------------------------------------------
 # Functions to check data
@@ -308,7 +308,10 @@ smax_chars <- c(20, 50, 100, 200, 300)
 
 # loading in the studies-to-add file so as to not duplicate additions
 studies_to_add_file <- file.path(file_dir, "ewas-sum-stats/studies-to-add.txt")
-studies_to_add <- readLines(studies_to_add_file)
+if (file.exists(studies_to_add_file))
+  studies_to_add <- readLines(studies_to_add_file)
+else
+  studies_to_add <- NULL
 
 # loading in old studies file so as to not duplicate data
 old_stuides_file <- file.path(file_dir, "ewas-sum-stats/combined_data/studies.txt")
