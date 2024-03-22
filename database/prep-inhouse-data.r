@@ -13,6 +13,10 @@
 
 options(stringsAsFactors = FALSE)
 
+library(readxl)
+library(data.table)
+library(dplyr)
+
 args <- commandArgs(trailingOnly = TRUE)
 file_dir <- args[1]
 inhouse_dir <- file.path(file_dir, "ewas-sum-stats/inhouse-data")
@@ -308,10 +312,11 @@ smax_chars <- c(20, 50, 100, 200, 300)
 
 # loading in the studies-to-add file so as to not duplicate additions
 studies_to_add_file <- file.path(file_dir, "ewas-sum-stats/studies-to-add.txt")
-if (file.exists(studies_to_add_file))
+if (file.exists(studies_to_add_file)) {
   studies_to_add <- readLines(studies_to_add_file)
-else
+} else {
   studies_to_add <- NULL
+}
 
 # loading in old studies file so as to not duplicate data
 old_stuides_file <- file.path(file_dir, "ewas-sum-stats/combined_data/studies.txt")
