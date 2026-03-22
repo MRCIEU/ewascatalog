@@ -1,8 +1,0 @@
-﻿cran,bioc,git
-devtools,rols,https://github.com/thomasbattram/usefunc
-BiocManager,,
-tidyverse,,
-bookdown,,
-knitr,,
-kableExtra,,
-RColorBrewer,,

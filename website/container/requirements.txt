@@ -1,0 +1,10 @@
+Django
+django-environ
+mysqlclient
+django-excel
+gunicorn
+requests
+pytabix
+django-ratelimit
+pandas
+dj_database_url

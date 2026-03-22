@@ -1,190 +1,51 @@
-# EWAS Catalog website
 
-> Battram, Thomas, Paul Yousefi, Gemma Crawford, Claire Prince, Mahsa
-> S. Babei, Gemma Sharp, Charlie Hatcher, et al. 2021.
-> ["The EWAS Catalog: A Database of Epigenome-wide Association Studies."](https://osf.io/837wn)
-> OSF Preprints. February 4. doi:10.31219/osf.io/837wn.
+## New version of the EWAS catalog
 
-Instructions, code and data for installing the EWAS Catalog.
+### Summary statistics
 
-This repository contains all code related to the EWAS Catalog.
-The catalog website and database is installed and updated by [catalog](catalog)
-script commands in a docker container. 
+Summary statistics can be found in the `data/studies` directory. 
 
-Files are divided into the following directories:
 
-- `published-ewas`: collected published EWAS summary statistics
-- `website`: website python code (Django)
-- `database`: scripts for creating and populating the database from data found in the `FILES_DIR` (see below)
-- `docker`: initialization files and scripts for installing the website and database within a docker container
-- `webserver`: configuration files for the webserver
-- `logo`: logo graphics files
-- `in-house-ewas`: Scripts and instructions for EWAS performed by us
+### Building and running the EWAS catalog website
 
-The EWAS catalog can be accessed via R using the 
-the [EWAS catalog R package](https://github.com/MRCIEU/ewascatalog-r).
+Before running the EWAS catalog website, it must be 
+configured and built. 
 
-## Environment
+Configure the website by creating
+`config.env` and `settings.env` files from the templates provided.
 
-Variables for the accessing the database can be found in `settings.env`.
-
-Below is a censored version.
+Building the website involves populating the database 
+from summary statistics in `DATA_DIR`
+and setting up the website files.
 ```
-DB=ewascatalog
-
-DATABASE_USER=ewas
-DATABASE_PASSWORD=...
-DATABASE_NAME=ewascatalog
-DATABASE_HOST=db
-DATABASE_PORT=...
-SECRET_KEY='...'
-DATABASE_URL=mysql://ewas:...@db:.../ewascatalog
-DATABASE_ROOT_PASSWORD=...
-
-MYSQL_ROOT_PASSWORD=...
-MYSQL_DATABASE=ewascatalog
-MYSQL_USER=ewas
-MYSQL_PASSWORD=...
-
-DOCKER_PASSWORD=...
-DOCKER_EMAIL=...
-
-DJANGO_EMAIL='ewascatalog@outlook.com'
-DJANGO_EMAIL_PASSWORD='...'
-
-ACCESS_TOKEN='...'
-SANDBOX_TOKEN='...'
-
-TWITTER_HANDLE=ewascatalog
-TWITTER_PASSWORD=...
+bash scripts/build.sh config.env
 ```
 
-## Running docker commands
+> Everything is put in `OUT_DIR`
+> specified in `config.env`, e.g. `live`. 
+> As a result, it is possible to have multiple versions of the 
+> catalog, just run `build.sh` with a different output directory name.
 
-The system runs within a Docker container. 
-
-For a user to run docker commands,
-they will need to belong to the 'docker'
-linux permissions group.
+Once built, the EWAS catalog website can be started.
 ```
-sudo usermod -a -G docker [USER]
-```
-For this change to take effect, the user
-will need to logout and then login.
-
-## Building the EWAS Catalog
-
-The entire pipeline is defined in the [catalog](catalog) script,
-and the catalog can be built with the following command:
-
-```
-bash catalog all
+bash scripts/start.sh config.env
 ```
 
-*Before* running it, however, you will need to assign values to
-variables `FILES_DIR`, `WEBSITE_DIR` and `SETTINGS` in [catalog](catalog).
+Locally, the website will be available at 
+`WEBSITE_HOST:WEBSITE_PORT`
+depending on `settings.env` (default 127.0.0.1:8080).
 
-`FILES_DIR` should provide the path to the directory
-containing catalog data files.
 
-`WEBSITE_DIR` should provide the path to the base directory
-where the website files will be located on the host machine.
-
-`SETTINGS` should provide the path to the `settings.env` file
-described earlier.
-
-That single step is actually composed of a sequence of several sub-steps:
-
-1. `bash catalog build`: copy docker files to the website and build the docker container
-2. `bash catalog start`: start the docker container running
-3. `bash catalog create-database`: create and populate the database with EWAS summary statistics
-
-Check [docker-problems.md](docker/docker-problems.md) to see previous bugs when building the docker container and potential solutions.
-
-## Navigating to the website
-
-The website can be found at `localhost:8080`
-or `[host IP address]:8080` or `[host name]:8080`.
-
-## Making changes
-
-Changes to the repository can be reflected in the running EWAS catalog as follows:
-
-- `website/`: Run `bash catalog update-website` and reload the website in the browser.
-  This will copy the files to the running website
-  and restart the 'web' docker service (defined [docker/docker-compose.yml](docker/docker-compose.yml)).
-- `database/`: This is more complicated. Details can be found [database/readme.md](database/readme.md).
-- `docker/`: Probably need to stop and start the whole thing (i.e. `bash catalog stop` and then `bash catalog start`).
-- `webserver/`: Run `bash catalog update-webserver` and reload the website in the browser.
-  This will copy the files to the running website
-  and restart the 'nginx' docker service (defined [docker/docker-compose.yml](docker/docker-compose.yml)).
-
-Note that the running website will be accessing files in `WEBSITE_DIR`.
-It is possible to edit files in `WEBSITE_DIR/catalog/static`
-and `WEBSITE_DIR/catalog/template` directly and observe the effects.
-Query-generated TSV files will appear here: `WEBSITE_DIR/catalog/static/tmp`.
-
-To completely take the whole system down and rebuild,
-it will need to be stopped (`bash catalog stop`),
-the docker containers deleted (`bash catalog rm`),
-the files deleted (`sudo rm -r WEBSITE_DIR`),
-and rebuilt (`bash catalog all`).
-
-## Command-line access to running docker containers
-
-To get bash shell access to the website running in the container:
+Once started, the EWAS catalog can be taken offline or stopped. 
 ```
-docker exec -it dev.ewascatalog bash
+bash scripts/stop.sh config.env
 ```
 
-For debugging purposes, it may be useful to look at:
-- web server (`docker exec -it dev.ewascatalog_srv`) logs in `/var/log/nginx`.
-- mysql (`docker exec -it dev.ewascatalog_db`) files in: `/var/db/mysql/`.
-
-## Database access port 
-
-The files `docker/docker-compose.yml` and `settings.env`
-refer to a port for accessing the MySQL database.
-It should match ports referenced in 
-`/etc/mysql/my.cnf` or `/etc/mysql/mysql.conf.d/mysqld.cnf`
-of the container.
-
-## Container IP address
-
-The container IP address is typically '172.17.0.3', but
-this can be verified:
+Finally, once built, 
+the EWAS catalog can be updated, 
+e.g. to add new data. 
+However, bare in mind that the website will be unavailable 
+during this time.
 ```
-docker inspect dev.ewascatalog | grep -e '"IPAddress"' | head -n 1 | sed 's/[^0-9.]*//g'
+bash scripts/update.sh config.env
 ```
-
-## Next steps
-
-### To do
-
-* Move repo over to the shark server and get it running as the main website.
-
-* Not known how published EWAS summary statistics get from
-  'published-ewas/study-files/' to the tables in
-  'files/ewas-sub-stats/published/'.  
-
-* Should have a command in the 'catalog' script for creating a backup of the
-  container. Building is pretty quick except for installing R packages ...
-
-* Update the acknowledgements section on the about page http://www.ewascatalog.org/about. Just need to add names to the template file.
-
-* Contact PACE members for full summary statistics of already published articles. Try Gemma first and test out the upload page (see New features below)
-
-* Add a feature to the EWAS Catalog R package that allows browsing of just the studies (e.g. the 'studies.txt' file in 'files/ewas-sub-stats/combined_data/').
-
-* Should only generate downloadable files of summary statistics when the user requests, not every time a query is run. Currently, to save space these files get deleted when a new query is submitted which could cause problems!
-
-* Update the 'in-house-ewas' pipeline so it matches the new 'upload' pipeline
-	- Update the study file generation to match the new data
-	- Update the scripts used in `bash catalog check-new-upload` and `bash catalog update-database` to incorporate in-house ewas 
-    
-### New features
-
-* Enrichment test for a set of CpG sites
-
-* Create an upload page for full summary statistics. This should contain: Clear details on how to access the full dataset (data will be put on Zenoto and have a DOI), some boxes to fill in for the study details, an upload button (with details on format data needs to be in).
-

@@ -1,0 +1,11 @@
+[mysqld]
+socket=/tmp/mysql.sock
+datadir=/data/mysql
+mysqlx-socket=/tmp/mysqlx.sock
+mysqlx-bind-address=127.0.0.1
+
+[client]
+socket=/tmp/mysql.sock
+
+[mysql]
+socket=/tmp/mysql.sock
