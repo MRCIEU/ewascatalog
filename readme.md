@@ -65,3 +65,14 @@ during this time.
 ```
 bash scripts/update.sh config.env
 ```
+
+## TODO 
+
+There is something not quite right with how 
+the database and website containers communicate.  
+It would be better not to have to create `/tmp/*.sock`
+files is `/tmp` is a public directory. 
+Probably better to create socket files 
+in the shared RAM-disk (`/dev/shm`). 
+Also looks like the python running the website 
+is actually using TCP?

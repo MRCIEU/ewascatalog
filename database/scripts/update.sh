@@ -32,7 +32,7 @@ apptainer instance start \
     --bind ${DATA_DIR}:/data/inputs \
     ${LIVE_DIR}/container.sif \
     app_db_instance
-sleep 60
+sleep 10
 
 echo "Updating database ..."
 apptainer exec \
@@ -42,6 +42,6 @@ apptainer exec \
 
 echo "Restarting the database ..."
 bash ${REPO_DIR}/database/scripts/stop.sh
-sleep 60
+sleep 10
 bash ${REPO_DIR}/database/scripts/start.sh ${CONFIG}
 

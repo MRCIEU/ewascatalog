@@ -23,13 +23,16 @@ sleep 2
 LIVE_DIR=${OUT_DIR}/database
 
 echo "Starting database ..."
+CWD=$(pwd)
+cd ${LIVE_DIR}
 apptainer instance start \
     --bind ${LIVE_DIR}/data:/data/mysql \
     --bind ${LIVE_DIR}/logs:/var/log/mysql \
     --bind ${LIVE_DIR}/run:/var/run/mysqld \
     ${LIVE_DIR}/container.sif \
     app_db_instance
+cd ${CWD}
 
-echo "Waiting for the database (60 seconds) ..."
-sleep 60
+echo "Waiting for the database (10 seconds) ..."
+sleep 10
 

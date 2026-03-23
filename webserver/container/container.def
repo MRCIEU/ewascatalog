@@ -1,14 +1,12 @@
 Bootstrap: docker
 From: nginx:alpine
 
-%files
-    nginx.conf /etc/nginx/nginx.conf
-
 %post
     mkdir -p /var/log/nginx /var/cache/nginx /var/run
     chmod -R 755 /var/log/nginx /var/cache/nginx
     mkdir -p /app/static
-
+    mkdir -p /etc/nginx
+    
 %startscript
     echo "Starting nginx ..."
     exec nginx -g 'daemon off;'

@@ -28,16 +28,17 @@ mkdir -p ${LIVE_DIR}
 ## copy the database container files 
 rsync -av ${REPO_DIR}/database/container/ ${LIVE_DIR}/
 
-## build the database container 
+
 CWD=$(pwd)
 cd ${LIVE_DIR}
+
+## build the database container 
 #rm -rf run data logs
 mkdir -p run data logs
 if [ ! -e container.sif ]; then
     echo "Building database container ..."
     apptainer build container.sif container.def
 fi
-cd ${CWD}
 
 ## if the database does not exist, initialize it
 if [ ! -d "${LIVE_DIR}/data/mysql" ]; then
@@ -52,6 +53,8 @@ if [ ! -d "${LIVE_DIR}/data/mysql" ]; then
     ${LIVE_DIR}/container.sif \
     bash /scripts/init.sh
 fi
+
+cd ${CWD}
 
 ## populate the database 
 bash ${REPO_DIR}/database/scripts/update.sh ${CONFIG}
