@@ -29,6 +29,8 @@ apptainer instance start \
     --bind ${LIVE_DIR}/data:/data/mysql \
     --bind ${LIVE_DIR}/logs:/var/log/mysql \
     --bind ${LIVE_DIR}/run:/var/run/mysqld \
+    --bind ${LIVE_DIR}/scripts:/scripts \
+    --bind ${DATA_DIR}:${DATA_DIR} \
     ${LIVE_DIR}/container.sif \
     app_db_instance
 cd ${CWD}

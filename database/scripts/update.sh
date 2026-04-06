@@ -24,6 +24,8 @@ sleep 2
 LIVE_DIR=${OUT_DIR}/database
 
 echo "Preparing for database update ..."
+CWD=$(pwd)
+cd ${LIVE_DIR}
 apptainer instance start \
     --bind ${LIVE_DIR}/data:/data/mysql \
     --bind ${LIVE_DIR}/logs:/var/log/mysql \
@@ -39,6 +41,8 @@ apptainer exec \
     --env-file ${SETTINGS} \
     instance://app_db_instance \
     bash /scripts/update.sh
+
+cd ${CWD}
 
 echo "Restarting the database ..."
 bash ${REPO_DIR}/database/scripts/stop.sh

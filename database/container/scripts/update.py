@@ -163,7 +163,7 @@ def update_counts(add_counts_script):
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python script.py <base_directory> <add_counts_script>")
+        print("Usage: python update.py <base_directory> <add_counts_script>")
         sys.exit(1)
 
     base_directory = sys.argv[1]

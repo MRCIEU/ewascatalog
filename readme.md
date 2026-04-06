@@ -60,10 +60,32 @@ bash scripts/stop.sh config.env
 Finally, once built, 
 the EWAS catalog can be updated, 
 e.g. to add new data. 
-However, bare in mind that the website will be unavailable 
+However, bear in mind that the website will be unavailable 
 during this time.
+
+First, download the study metadata uploaded to jotform 
+(as `studies.csv` with one row per EWAS)
+and retrieve the summary statistics uploaded to dropbox 
+(one csv file per EWAS).
+With both of these in the same folder: 
+```
+bash scripts/prep.sh config.env path/to/folder
+```
+
+This will create 'study.txt' and 'results.txt' files
+in the same folder. 
+
+Copy this folder to `data/studies/`
+and add to the database. 
 ```
 bash scripts/update.sh config.env
+```
+
+If an error is identified in the update, 
+it can be reversed:
+
+```
+bash scripts/remove.sh config.env path/to/folder
 ```
 
 ## TODO 
@@ -76,3 +98,4 @@ Probably better to create socket files
 in the shared RAM-disk (`/dev/shm`). 
 Also looks like the python running the website 
 is actually using TCP?
+-- see minimal-webapp for an example
