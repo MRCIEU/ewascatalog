@@ -2,11 +2,10 @@
 
 set -e
 
-: "${DATABASE_HOST:?database hostname missing}"
 : "${DATABASE_NAME:?database identifier missing}"
 : "${DATABASE_USER:?database user name missing}"
 : "${DATABASE_PASSWORD:?database password missing}"
-: "${DATABASE_PORT:?database port missing}"
+: "${MYSQL_ROOT_PASSWORD:?root password missing}"
 
 . /opt/venv/bin/activate
-python /scripts/update.py /data/inputs/studies /scripts/add-counts.sql
+python /scripts/update.py /data/studies /scripts/add-counts.sql

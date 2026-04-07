@@ -21,14 +21,12 @@ sleep 2
 LIVE_DIR=${OUT_DIR}/webserver
 
 echo "Starting webserver ..."
-CWD=$(pwd)
-cd ${LIVE_DIR}
-apptainer instance start \
+cd ${LIVE_DIR}; mkdir -p logs cache run
+cd ${LIVE_DIR}; apptainer instance start \
     --bind ${LIVE_DIR}/logs:/var/log/nginx \
     --bind ${LIVE_DIR}/cache:/var/cache/nginx \
     --bind ${LIVE_DIR}/run:/var/run \
     --bind ${OUT_DIR}/website/django/catalog/static:/app/static:ro \
     --bind ${LIVE_DIR}/nginx.conf:/etc/nginx/nginx.conf \
-    ${LIVE_DIR}/container.sif \
+    ${LIVE_DIR}/webserver.sif \
     app_webserver_instance
-cd ${CWD}

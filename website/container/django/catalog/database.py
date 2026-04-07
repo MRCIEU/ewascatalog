@@ -7,9 +7,13 @@ from django.conf import settings
 import MySQLdb
 
 def default_connection():
-    dbhost = settings.DATABASES['default']['HOST']
     dbuser = settings.DATABASES['default']['USER']
     dbpassword = settings.DATABASES['default']['PASSWORD']
     dbname = settings.DATABASES['default']['NAME']
-    return MySQLdb.connect(host=dbhost,user=dbuser,password=dbpassword,db=dbname)
+    dbsocket = settings.DATABASES['default']['OPTIONS']['unix_socket']
+    return MySQLdb.connect(
+        user=dbuser,
+        password=dbpassword,
+        db=dbname,
+        unix_socket=dbsocket)
     return(db)

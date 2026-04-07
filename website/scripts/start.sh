@@ -17,6 +17,7 @@ SETTINGS=$(realpath "$SETTINGS")
 OUT_DIR=$(realpath "$OUT_DIR")
 REPO_DIR=$(realpath "$REPO_DIR")
 DATA_DIR=$(realpath "$DATA_DIR")
+SOCKET_DIR=$(realpath "$SOCKET_DIR")
 
 LIVE_DIR=${OUT_DIR}/website
 mkdir -p ${LIVE_DIR}
@@ -27,13 +28,14 @@ sleep 2
 bash ${REPO_DIR}/website/scripts/update.sh ${CONFIG}
 
 echo "Starting website ..."
-CWD=$(pwd)
-cd ${LIVE_DIR}
-apptainer instance start \
+mkdir -p ${LIVE_DIR}/logs
+cd ${LIVE_DIR}; apptainer instance start \
+    --bind ${SOCKET_DIR}:/var/run/mysql-shared \
     --bind ${DATA_DIR}:/data \
     --bind ${LIVE_DIR}/django:/django \
+    --bind ${LIVE_DIR}/logs:/app/logs/ \
+    --bind ${LIVE_DIR}/scripts:/scripts \
     --env-file ${SETTINGS} \
-    ${LIVE_DIR}/container.sif \
+    ${LIVE_DIR}/website.sif \
     app_website_instance
-cd ${CWD}
 

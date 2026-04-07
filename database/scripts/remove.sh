@@ -10,27 +10,29 @@ fi
 CONFIG=$1
 DIR=$2
 
-CONFIG=$(realpath "$CONFIG")
-DIR=$(realpath "$DIR")
-
 if [ ! -f "$CONFIG" ]; then
 	echo "Error: config file '$CONFIG' does not exist."
 	exit 1
 fi
 
-if [ ! -f "$DIR/studies.txt" ]; then
-	echo "Error: '$DIR/studies' does not exist."
+if [ ! -d "$DIR" ]; then
+	echo "Error: study directory '$DIR' does not exist."
 	exit 1
 fi
 
+
+CONFIG=$(realpath "$CONFIG")
 source ${CONFIG}
 
+OUT_DIR=$(realpath "$OUT_DIR")
 SETTINGS=$(realpath "$SETTINGS")
+
+LIVE_DIR=${OUT_DIR}/database
 
 echo "Preparing to REMOVE studies in ${DIR}/studies.txt ..."
 
 apptainer exec \
     --env-file ${SETTINGS} \
-    --pwd ${DIR} \
+    --pwd ${LIVE_DIR} \
     instance://app_db_instance \
-    bash /scripts/remove.sh ${DIR}
+    bash /scripts/remove.sh /data/${DIR}

@@ -11,7 +11,6 @@ CONFIG=$1
 DIR=$2
 
 CONFIG=$(realpath "$CONFIG")
-DIR=$(realpath "$DIR")
 
 if [ ! -f "$CONFIG" ]; then
 	echo "Error: config file '$CONFIG' does not exist."

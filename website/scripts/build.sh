@@ -21,11 +21,8 @@ mkdir -p ${LIVE_DIR}
 
 bash ${REPO_DIR}/website/scripts/update.sh ${CONFIG}
 
-CWD=$(pwd)
-cd ${LIVE_DIR}
-mkdir -p django/catalog/static/tmp
-if [ ! -e container.sif ]; then
+mkdir -p ${LIVE_DIR}/django/catalog/static/tmp
+if [ ! -e "${LIVE_DIR}/website.sif" ]; then
     echo "Building website container..."
-    apptainer build container.sif container.def
+    cd ${LIVE_DIR}; apptainer build website.sif website.def
 fi
-cd ${CWD}

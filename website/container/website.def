@@ -6,7 +6,14 @@ From: ubuntu:24.04
     install-packages.r /code/install-packages.r
 
 %post
+    ## base of sebsite
     mkdir -p /django
+    ## database socket directory
+    mkdir -p /var/run/mysql-shared
+    ## django log files
+    mkdir -p /app/logs
+    ## directory of the start-website.sh script
+    mkdir -p /scripts
     
     # install linux libraries
     apt-get update -y
@@ -86,29 +93,4 @@ From: ubuntu:24.04
     export XDG_RUNTIME_DIR=/tmp/xdg_runtime_home
 
 %startscript
-    : "${DATABASE_HOST:?database ip address missing}"
-    : "${DATABASE_PORT:?database port missing}"
-    : "${DATABASE_NAME:?database name missing}"
-    : "${DATABASE_USER:?database username missing}"
-    : "${DATABASE_PASSWORD:?database password missing}"
-    : "${WEBSITE_PORT:?django website port}"
-    : "${DJANGO_SETTINGS_MODULE:?Django settings missing}"
-
-    . /opt/venv/bin/activate
-
-    echo "Waiting for the database ..."
-    for i in {1..30}; do
-        if python -c "import pymysql; pymysql.connect(host='$DATABASE_HOST', port=int('$DATABASE_PORT'), user='$DATABASE_USER', password='$DATABASE_PASSWORD', database='$DATABASE_NAME')" 2>/dev/null; then
-            echo "Database responded"
-            break
-        fi
-        echo "Still waiting for the database ..."
-        sleep 2
-    done
-
-    cd /django
-    python manage.py migrate --noinput
-    python manage.py collectstatic --noinput
-    exec gunicorn --workers 3 --bind 0.0.0.0:${WEBSITE_PORT} website.wsgi:application
-
-
+    exec bash /scripts/start-website.sh

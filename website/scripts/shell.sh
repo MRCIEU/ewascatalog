@@ -16,14 +16,11 @@ source ${CONFIG}
 
 SETTINGS=$(realpath "$SETTINGS")
 
-echo "To login to the database: mysql -u \${DATABASE_USER} -p\${DATABASE_PASSWORD} \${DATABASE_NAME}"
+echo "Starting website container ..."
+echo "(run a query: /opt/venv/bin/python -s /scripts/run-query.py <query>)"
 
 apptainer exec \
     --env-file ${SETTINGS} \
     --pwd $(realpath $(pwd)) \
-    instance://app_db_instance \
+    instance://app_website_instance \
     /bin/bash
-
-
-
-

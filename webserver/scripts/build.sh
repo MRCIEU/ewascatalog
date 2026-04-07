@@ -33,11 +33,9 @@ envsubst '${WEBSITE_HOST},${WEBSITE_PORT},${WEBSERVER_NAME},${WEBSERVER_PORT}' \
 	 < ${REPO_DIR}/webserver/container/nginx.conf \
 	 > ${LIVE_DIR}/nginx.conf 
 
-CWD=$(pwd)
-cd ${LIVE_DIR}
-mkdir -p logs cache run
-if [ ! -e container.sif ]; then
+cd ${LIVE_DIR}; mkdir -p logs cache run
+if [ ! -e ${LIVE_DIR}/webserver.sif ]; then
     echo "Building webserver container..."
-    apptainer build --ignore-fakeroot-command container.sif container.def
+    cd ${LIVE_DIR}; apptainer build \
+       --ignore-fakeroot-command webserver.sif webserver.def
 fi
-cd ${CWD}

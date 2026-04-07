@@ -8,10 +8,8 @@ from sqlalchemy import create_engine, text
 
 DB_USER = os.environ['DATABASE_USER']
 DB_PASSWORD = os.environ['DATABASE_PASSWORD']
-DB_HOST = os.environ['DATABASE_HOST']
 DB_NAME = os.environ['DATABASE_NAME']
-DB_PORT = os.environ['DATABASE_PORT']
-MYSQL_ROOT_PASSWORD = os.environ['MYSQL_ROOT_PASSWORD']
+SOCKET="/var/run/mysqld/mysql.sock"
 
 def get_existing_study_ids(engine):
     """
@@ -54,7 +52,7 @@ def main():
 
     try:
         engine = create_engine(
-            f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+            f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost/{DB_NAME}?unix_socket={SOCKET}'
         )
         if not os.path.exists(os.path.join(path,"studies.txt")):
             raise ValueError(f"Input file '{path}/studies.txt' does not exist.")

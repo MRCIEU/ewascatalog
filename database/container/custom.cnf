@@ -1,11 +1,15 @@
 [mysqld]
-socket=/tmp/mysql.sock
-datadir=/data/mysql
-mysqlx-socket=/tmp/mysqlx.sock
-mysqlx-bind-address=127.0.0.1
+socket=/var/run/mysqld/mysql.sock
+datadir=/var/lib/mysql
+mysqlx-socket=/var/run/mysqld/mysqlx.sock
+
+skip-networking
+
+back_log=512
+max_connections=1000
 
 [client]
-socket=/tmp/mysql.sock
+socket=/var/run/mysqld/mysql.sock
 
 [mysql]
-socket=/tmp/mysql.sock
+socket=/var/run/mysqld/mysql.sock

@@ -8,10 +8,9 @@ from sqlalchemy import create_engine, text
 
 DB_USER = os.environ['DATABASE_USER']
 DB_PASSWORD = os.environ['DATABASE_PASSWORD']
-DB_HOST = os.environ['DATABASE_HOST']
 DB_NAME = os.environ['DATABASE_NAME']
-DB_PORT = os.environ['DATABASE_PORT']
 MYSQL_ROOT_PASSWORD = os.environ['MYSQL_ROOT_PASSWORD']
+SOCKET="/var/run/mysqld/mysql.sock"
 
 STUDY_FIELDS = [
     "author","consortium","pmid","date","trait","efo",
@@ -144,16 +143,17 @@ def update_counts(add_counts_script):
     """
     Runs the SQL script to update counts in the database.
     """
-    print("Updating counts ...")
+    print("Updating counts (this takes a while) ...")
     try:
         ret = subprocess.run(
             ['mysql',
              '-u', 'root',
              '-p' + MYSQL_ROOT_PASSWORD,
+             '--socket=' + SOCKET,
              DB_NAME],
             stdin=open(add_counts_script, 'r'),
             capture_output=True,
-            text=True)
+            text=True)        
         if ret.returncode != 0:
             print(f"Error updating counts: {ret.stderr}")
         else:
@@ -171,7 +171,7 @@ def main():
 
     try:
         engine = create_engine(
-            f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+            f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost/{DB_NAME}?unix_socket={SOCKET}'
         )
         study_dirs = get_study_directories(base_directory)
         print(f"Found {len(study_dirs)} study directories")

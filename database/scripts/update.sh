@@ -12,40 +12,15 @@ fi
 CONFIG=$(realpath "$CONFIG")
 
 source ${CONFIG}
-
-SETTINGS=$(realpath "$SETTINGS")
 OUT_DIR=$(realpath "$OUT_DIR")
-REPO_DIR=$(realpath "$REPO_DIR")
-DATA_DIR=$(realpath "$DATA_DIR")
-
-bash ${REPO_DIR}/database/scripts/stop.sh
-sleep 2
+SETTINGS=$(realpath "$SETTINGS")
 
 LIVE_DIR=${OUT_DIR}/database
 
-echo "Preparing for database update ..."
-CWD=$(pwd)
-cd ${LIVE_DIR}
-apptainer instance start \
-    --bind ${LIVE_DIR}/data:/data/mysql \
-    --bind ${LIVE_DIR}/logs:/var/log/mysql \
-    --bind ${LIVE_DIR}/run:/var/run/mysqld \
-    --bind ${LIVE_DIR}/scripts:/scripts \
-    --bind ${DATA_DIR}:/data/inputs \
-    ${LIVE_DIR}/container.sif \
-    app_db_instance
-sleep 10
-
 echo "Updating database ..."
+
 apptainer exec \
     --env-file ${SETTINGS} \
+    --pwd ${LIVE_DIR} \
     instance://app_db_instance \
-    bash /scripts/update.sh
-
-cd ${CWD}
-
-echo "Restarting the database ..."
-bash ${REPO_DIR}/database/scripts/stop.sh
-sleep 10
-bash ${REPO_DIR}/database/scripts/start.sh ${CONFIG}
-
+    bash /scripts/update.sh 
