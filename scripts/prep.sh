@@ -12,17 +12,15 @@ DIR=$2
 
 CONFIG=$(realpath "$CONFIG")
 
-if [ ! -f "$CONFIG" ]; then
-	echo "Error: config file '$CONFIG' does not exist."
-	exit 1
-fi
-
-if [ ! -d "$DIR" ]; then
-	echo "Error: study directory '$DIR' does not exist."
-	exit 1
-fi
-
 source ${CONFIG}
+
+DATA_DIR=$(realpath "$DATA_DIR")
+
+if [ ! -d "$DATA_DIR/$DIR" ]; then
+	echo "Error: study directory '$DATA_DIR/$DIR' does not exist."
+	exit 1
+fi
+
 REPO_DIR=$(realpath "$REPO_DIR")
 
 bash ${REPO_DIR}/database/scripts/prep.sh ${CONFIG} ${DIR}

@@ -10,19 +10,15 @@ fi
 CONFIG=$1
 DIR=$2
 
-if [ ! -f "$CONFIG" ]; then
-	echo "Error: config file '$CONFIG' does not exist."
-	exit 1
-fi
-
-if [ ! -d "$DIR" ]; then
-	echo "Error: study directory '$DIR' does not exist."
-	exit 1
-fi
-
-
 CONFIG=$(realpath "$CONFIG")
 source ${CONFIG}
+
+DATA_DIR=$(realpath "$DATA_DIR")
+
+if [ ! -d "$DATA_DIR/$DIR" ]; then
+	echo "Error: study directory '$DATA_DIR/$DIR' does not exist."
+	exit 1
+fi
 
 OUT_DIR=$(realpath "$OUT_DIR")
 SETTINGS=$(realpath "$SETTINGS")

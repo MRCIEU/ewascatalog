@@ -11,18 +11,14 @@ CONFIG=$1
 DIR=$2
 
 CONFIG=$(realpath "$CONFIG")
-
-if [ ! -f "$CONFIG" ]; then
-	echo "Error: config file '$CONFIG' does not exist."
-	exit 1
-fi
-
-if [ ! -f "$DIR/studies.txt" ]; then
-	echo "Error: '$DIR/studies.txt' does not exist."
-	exit 1
-fi
-
 source ${CONFIG}
-REPO_DIR=$(realpath "$REPO_DIR")
 
+DATA_DIR=$(realpath "$DATA_DIR")
+
+if [ ! -f "$DATA_DIR/$DIR/studies.txt" ]; then
+	echo "Error: '$DATA_DIR/$DIR/studies.txt' does not exist."
+	exit 1
+fi
+
+REPO_DIR=$(realpath "$REPO_DIR")
 bash ${REPO_DIR}/database/scripts/remove.sh ${CONFIG} ${DIR}
